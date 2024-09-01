@@ -1,8 +1,11 @@
-package business;
+package br.lpm.business;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Pessoa {
+
+    static final int MAIOR_IDADE = 18;
     private String nome;
     private LocalDate dataNascimento;
     private Genero genero;
@@ -37,7 +40,7 @@ public class Pessoa {
                 hasSpace = true;
             }
         }
-        return requireSpace ? hasSpace : true;
+        return !requireSpace || hasSpace;
     }
     public void setNome(String nome) {
         if(isValidWord(nome, true)){
@@ -159,6 +162,15 @@ public class Pessoa {
 
     public void setMoradia(Moradia moradia) {
         this.moradia = moradia;
+    }
+    public boolean isAdulto() {
+        if (this.dataNascimento == null) {
+            return false;
+        }
+        LocalDate dataAtual = LocalDate.now();
+        int idade = Period.between(this.dataNascimento, dataAtual).getYears();
+
+        return idade >= MAIOR_IDADE;
     }
 
     public Pessoa(String nome, LocalDate dataNascimento, Genero genero, float altura, int peso,
