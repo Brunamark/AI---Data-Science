@@ -149,7 +149,11 @@ public class Dataset {
     }
 
     public static EstadoCivil modeEstadoCivil() {
-        int solteiro = 0, casado = 0, divorciado = 0, separado = 0, viuvo = 0;
+        int solteiro = 0;
+        int casado = 0;
+        int divorciado = 0;
+        int separado = 0;
+        int viuvo = 0;
         for (int i = 0; i < pessoas.length; i++) {
             if (pessoas[i].getEstadoCivil() == EstadoCivil.SOLTEIRO) {
                 solteiro++;
@@ -180,10 +184,118 @@ public class Dataset {
         }
         if (viuvo > contagemMaxima) {
             modo = EstadoCivil.VIUVO;
-            contagemMaxima = viuvo;
         }
 
         return modo;
+    }
 
+    public static float percentEscolaridade(Escolaridade escolaridade){
+        int contagemEscolaridade = 0;
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].getEscolaridade() == escolaridade) {
+                contagemEscolaridade++;
+            }
+        }
+        return ((float) contagemEscolaridade / pessoas.length) * 100;
+    }
+
+
+    public static Escolaridade modeEscolaridade() {
+        int fundamental = 0;
+        int medio = 0;
+        int superior = 0;
+        int posGraduacao = 0;
+        int nenhuma = 0;
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].getEscolaridade() == Escolaridade.FUNDAMENTAL) {
+                fundamental++;
+            } else if (pessoas[i].getEscolaridade() == Escolaridade.MEDIO) {
+                medio++;
+            } else if (pessoas[i].getEscolaridade() == Escolaridade.SUPERIOR) {
+                superior++;
+            } else if (pessoas[i].getEscolaridade() == Escolaridade.POS_GRADUACAO) {
+                posGraduacao++;
+            } else {
+                nenhuma++;
+            }
+        }
+        Escolaridade escolaridade = Escolaridade.FUNDAMENTAL; 
+        int contagemMaxima = fundamental; 
+
+        if (medio > contagemMaxima) {
+            escolaridade = Escolaridade.MEDIO;
+            contagemMaxima = medio;
+        }
+        if (superior > contagemMaxima) {
+            escolaridade = Escolaridade.SUPERIOR;
+            contagemMaxima = superior;
+        }
+        if (posGraduacao > contagemMaxima) {
+            escolaridade = Escolaridade.POS_GRADUACAO;
+            contagemMaxima = posGraduacao;
+        }
+        if (nenhuma > contagemMaxima) {
+            escolaridade = Escolaridade.NENHUMA;
+        }
+        
+
+        return escolaridade;
+    }
+
+    public static float percentMoradia(Moradia moradia){
+        int contagemMoradia = 0;
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].getMoradia() == moradia) {
+                contagemMoradia++;
+            }
+        }
+        return ((float) contagemMoradia / pessoas.length) * 100;
+    }
+
+    public static Moradia modeMoradia(){
+        int aluguel = 0;
+        int casaPropria = 0;
+        int comFamilia = 0;
+     
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].getMoradia() == Moradia.ALUGUEL) {
+                aluguel++;
+            } else if (pessoas[i].getMoradia() == Moradia.CASA_PROPRIA) {
+                casaPropria++;
+            } else {
+                comFamilia++;
+            }
+        }
+        Moradia moradia = Moradia.ALUGUEL; 
+        int contagemMaxima = aluguel; 
+
+        if (casaPropria > contagemMaxima) {
+            moradia = Moradia.CASA_PROPRIA;
+            contagemMaxima = casaPropria;
+        }
+        if (comFamilia > contagemMaxima) {
+            moradia = Moradia.COM_FAMILIA;
+        }
+         
+        return moradia;
+    }
+    public static float percentHobby(Hobby hobby){
+        int contagemHobby = 0;
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].getHobby() == hobby) {
+                contagemHobby++;
+            }
+        }
+        return ((float) contagemHobby / pessoas.length) * 100;
+    }
+
+    public static float percentFeliz(){
+        int contagemFeliz = 0;
+        for (int i = 0; i < pessoas.length; i++) {
+            if (pessoas[i].isFeliz()) {
+                contagemFeliz++;
+            }
+        }
+        return ((float) contagemFeliz / pessoas.length) * 100;
     }
 }
