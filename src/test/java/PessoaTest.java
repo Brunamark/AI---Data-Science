@@ -1,4 +1,3 @@
-package test;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,8 +5,8 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import business.Genero;
-import business.Pessoa;
+import br.lpm.business.Genero;
+import br.lpm.business.Pessoa;
 
 public class PessoaTest {
 
