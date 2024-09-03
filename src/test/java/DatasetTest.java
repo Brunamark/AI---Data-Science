@@ -1,33 +1,81 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import br.lpm.business.Dataset;
+import br.lpm.business.Escolaridade;
+import br.lpm.business.EstadoCivil;
+import br.lpm.business.Genero;
+import br.lpm.business.Hobby;
+import br.lpm.business.Moradia;
+import br.lpm.business.Pessoa;
 
 public class DatasetTest {
+
+    public Dataset dataset;
+    public static Pessoa pessoa1;
+    public static Pessoa pessoa2;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        dataset = new Dataset();
+        pessoa1 = new Pessoa("Mikael", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.80f, 65, 3000,
+                "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+                Moradia.COM_FAMILIA);
+        pessoa2 = new Pessoa("Barbara", LocalDate.of(2002, 1, 22), Genero.FEMININO, 1.60f, 58, 2000,
+                "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+                Moradia.COM_FAMILIA);
+        dataset.addPessoa(pessoa1);
+        dataset.addPessoa(pessoa2);
+    }
+
+    private int getNumPessoas(Pessoa[] pessoas) {
+        int contPessoa = 0;
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa != null && pessoa.getNome() != null) {
+                contPessoa++;
+            }
+        }
+        return contPessoa;
+    }
+
     @Test
     void testAddPessoa() {
-        fail("Not yet implemented");
+
+        Pessoa[] pessoas = dataset.getAll();
+        assertEquals(2, getNumPessoas(pessoas), "Valor valido de pessoa");
     }
 
     @Test
     void testAvgAltura() {
-        fail("Not yet implemented");
+
+        assertEquals(1.7f, dataset.avgAltura(), "Valor valido de altura");
 
     }
 
     @Test
     void testAvgPeso() {
-        fail("Not yet implemented");
+
+        assertEquals(62, dataset.avgPeso(), "Valor valido de altura");
 
     }
 
     @Test
     void testGetAll() {
-        fail("Not yet implemented");
+
+        Pessoa[] pessoas = dataset.getAll();
+        assertEquals(pessoa1, pessoas[0], "Valor valido de pessoas");
+        assertEquals(pessoa2, pessoas[1], "Valor valido de pessoas");
 
     }
 
     @Test
     void testGetPessoaByName() {
-        fail("Not yet implemented");
+
+    
+        assertEquals("Mikael", dataset.getPessoaByName("mikael"), "Valor valido de pessoa");
 
     }
 
