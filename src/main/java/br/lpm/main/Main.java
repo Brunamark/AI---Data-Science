@@ -57,12 +57,39 @@ public class Main {
                 DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
               
+                int fundamental = 0;
+                int medio = 0;
+                int superior = 0;
+                int posGraduacao = 0;
+                int nenhuma = 0;
 
-                for (Escolaridade escolaridade : Escolaridade.values()) {
-                        float percent = dataset.percentEscolaridade(escolaridade);
-                        dataSet.addValue(percent,"Escolaridade",escolaridade.toString());
-                    }
-              
+                for (Pessoa pessoa : dataset.getAll()) {
+                        if (pessoa != null) {
+                                switch (pessoa.getEscolaridade()) {
+                                        case FUNDAMENTAL:
+                                                fundamental++;
+                                                break;
+                                        case MEDIO:
+                                                medio++;
+                                                break;
+                                        case SUPERIOR:
+                                                superior++;
+                                                break;
+                                        case POS_GRADUACAO:
+                                                posGraduacao++;
+                                                break;
+                                        case NENHUMA:
+                                                nenhuma++;
+                                                break;
+                                }
+                        }
+                }
+
+                dataSet.addValue(fundamental, "Escolaridade", "Fundamental");
+                dataSet.addValue(medio, "Escolaridade", "Médio");
+                dataSet.addValue(superior, "Escolaridade", "Superior");
+                dataSet.addValue(posGraduacao, "Escolaridade", "Pós-Graduação");
+                dataSet.addValue(nenhuma, "Escolaridade", "Nenhuma");
 
                 JFreeChart chart = ChartFactory.createBarChart("Distribuição de Escolaridade",
                                 "Escolaridade", "Número de Pessoas", dataSet,
