@@ -1,7 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +36,8 @@ public class DatasetTest {
         pessoa4 = new Pessoa("Ana", LocalDate.of(2023, 10, 15), Genero.FEMININO, 1.65f, 63, 1200,
                 "GO", Hobby.ARTE, EstadoCivil.VIUVO, Escolaridade.NENHUMA, true,
                 Moradia.COM_FAMILIA);
-        pessoa5 = new Pessoa("Mikael", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.80f, 65, 3000,
-                "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+        pessoa5 = new Pessoa("Pedro", LocalDate.of(1995, 3, 25), Genero.MASCULINO, 1.88f, 78, 1500,
+                "PR", Hobby.LIVRO, EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
                 Moradia.COM_FAMILIA);
         dataset.addPessoa(pessoa1);
         dataset.addPessoa(pessoa2);
@@ -48,21 +46,12 @@ public class DatasetTest {
 
     }
 
-    private int getNumPessoas(Pessoa[] pessoas) {
-        int contPessoa = 0;
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa != null && pessoa.getNome() != null) {
-                contPessoa++;
-            }
-        }
-        return contPessoa;
-    }
-
     @Test
     void testAddPessoa() {
+        dataset.addPessoa(pessoa5);
 
         Pessoa[] pessoas = dataset.getAll();
-        assertEquals(4, getNumPessoas(pessoas), "Valor valido de pessoa");
+        assertEquals(5, dataset.size(), "Valor valido de pessoa");
     }
 
     @Test
@@ -94,8 +83,7 @@ public class DatasetTest {
     @Test
     void testGetPessoaByName() {
 
-
-        assertEquals("Mikael", dataset.getPessoaByName("mikael"), "Valor valido de pessoa");
+        assertEquals(pessoa1, dataset.getPessoaByName(pessoa1.getNome()), "Valor valido de pessoa");
 
     }
 
@@ -145,7 +133,7 @@ public class DatasetTest {
 
     @Test
     void testPercentAdult() {
-        assertEquals(80f, dataset.percentAdult(), "Valor valido para porcentagem adulto");
+        assertEquals(75f, dataset.percentAdult(), "Valor valido para porcentagem adulto");
 
     }
 
@@ -204,7 +192,7 @@ public class DatasetTest {
     @Test
     void testRemovePessoaByName() {
         
-        dataset.removePessoaByName("Barbara");
+        dataset.removePessoaByName(pessoa2.getNome());
         assertEquals(3, dataset.size(), "Valor valido para remocao");
        
 

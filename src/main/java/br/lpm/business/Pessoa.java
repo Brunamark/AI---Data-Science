@@ -22,7 +22,7 @@ public class Pessoa {
 
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     private boolean isValidWord(String word, boolean requireSpace){

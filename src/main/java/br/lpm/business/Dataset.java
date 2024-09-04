@@ -11,43 +11,51 @@ public class Dataset {
         for (int i = 0; i < pessoas.length; i++) {
             if (pessoas[i] == null) {
                 pessoas[i] = pessoa;
+                System.out.println("Adicionou");
                 break;
             }
         }
 
     }
+
     public void removePessoa(Pessoa pessoa) {
         if (pessoa == null) {
-            return; 
+            return;
         }
-    
+
         for (int i = 0; i < pessoas.length; i++) {
-            if (pessoas[i] != null && Objects.equals(pessoas[i], pessoa)) {
+            if (pessoas[i] != null && pessoas[i] == pessoa) {
                 for (int j = i; j < pessoas.length - 1; j++) {
                     pessoas[j] = pessoas[j + 1];
                 }
                 pessoas[pessoas.length - 1] = null;
-                return; 
+                return;
             }
         }
     }
-    public void removePessoaByName(String pessoa) {
-        if(pessoa == null){
+
+    public void removePessoaByName(String nome) {
+
+        if (nome == null) {
             return;
         }
         for (int i = 0; i < pessoas.length; i++) {
-            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(pessoa)) {
+
+            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(nome)) {
                 for (int j = i; j < pessoas.length - 1; j++) {
                     pessoas[j] = pessoas[j + 1];
                 }
                 pessoas[pessoas.length - 1] = null;
-                return; 
+                return;
             }
         }
-        
+
     }
 
     public void replacePessoa(Pessoa oldPessoa, Pessoa newPessoa) {
+        if(oldPessoa == null || newPessoa == null){
+            return;
+        }
         for (int i = 0; i < pessoas.length; i++) {
             if (pessoas[i] != null && pessoas[i].equals(oldPessoa)) {
                 pessoas[i] = newPessoa;
@@ -55,9 +63,9 @@ public class Dataset {
         }
     }
 
-    public Pessoa getPessoaByName(String pessoa) {
+    public Pessoa getPessoaByName(String nome) {
         for (int i = 0; i < pessoas.length; i++) {
-            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(pessoa)) {
+            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(nome)) {
                 return pessoas[i];
             }
         }
