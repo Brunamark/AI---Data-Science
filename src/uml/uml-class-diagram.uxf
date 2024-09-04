@@ -1,26 +1,81 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>10</x><y>10</y><w>210</w><h>190</h></coordinates><panel_attributes>
-br::lpm::Pessoa
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>40</x><y>0</y><w>210</w><h>190</h></coordinates><panel_attributes>
+Pessoa
 
 --
--id: Long
-_-ClassAttribute: Long_
+- nome : String
+- dataNascimento: LocalDate
+- altura: float
+- peso: int
+- renda: float
+- naturalidade: String
+- feliz: boolean
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>0</y><w>360</w><h>440</h></coordinates><panel_attributes>Dataset
 --
-#Operation(i: int): int
-/+AbstractOperation()/
+-pessoas: Pessoa[]
++ MAX_PESSOAS : int {static, final}
 --
-Responsibilities
--- Resp1
-*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>10</y><w>210</w><h>190</h></coordinates><panel_attributes>Dataset
++ addPessoa(pessoa : Pessoa) : void 
++ removePessoa(pessoa : Pessoa) : void 
++ removePessoaByName(nome : String) : void 
++ replacePessoa(oldPessoa : Pessoa, newPessoa : Pessoa) : void 
++ getPessoaByName(nome : String) : Pessoa 
++ getAll() : Pessoa[]        
++ removeAll() : void         
++ size() : int               
++ maxAltura() : float        
++ minAltura() : float        
++ avgAltura() : float        
++ maxPeso() : int            
++ minPeso() : int            
++ avgPeso() : float          
++ percentAdult() : float     
++ percentEstadoCivil(estadoCivil : EstadoCivil) : float 
++ modeEstadoCivil() : EstadoCivil 
++ percentEscolaridade(escolaridade : Escolaridade) : float 
++ modeEscolaridade() : Escolaridade 
++ percentMoradia(moradia : Moradia) : float 
++ modeMoradia() : Moradia    
++ percentHobby() : float     
++ percentFeliz() : float  </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>40</x><y>220</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Genero 
 --
-- _MAX_PESSOAS: const int = 1000
++FEMININO
++MASCULINO
++NAO_BINARIO
++NAO_RESPONDER
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>470</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Hobby 
 --
-#Operation(i: int): int
-/+AbstractOperation()/
++ARTE
++ESPORTE
++CINEMA
++LIVRO
++MÚSICA
++CULINÁRIA
++GAME
++NENHUM
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>40</x><y>540</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Escolaridade
 --
-Responsibilities
--- Resp1
-*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>250</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-br::lpm::EstadoCivil
++NENHUMA
++FUNDAMENTAL
++MEDIO
++SUPERIOR
++POS_GRADUACAO
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>590</x><y>470</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Moradia 
+--
++COM_FAMILIA
++ALUGUEL
++CASA_PROPRIA
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>40</x><y>380</y><w>210</w><h>140</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+EstadoCivil
 --
 +SOLTEIRO
 +CASADO

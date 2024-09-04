@@ -11,7 +11,6 @@ public class Dataset {
         for (int i = 0; i < pessoas.length; i++) {
             if (pessoas[i] == null) {
                 pessoas[i] = pessoa;
-                System.out.println("Adicionou");
                 break;
             }
         }
