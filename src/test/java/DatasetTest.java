@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,11 @@ public class DatasetTest {
     public Dataset dataset;
     public static Pessoa pessoa1;
     public static Pessoa pessoa2;
+    public static Pessoa pessoa3;
+    public static Pessoa pessoa4;
+    public static Pessoa pessoa5;
+
+
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -27,38 +31,40 @@ public class DatasetTest {
         pessoa2 = new Pessoa("Barbara", LocalDate.of(2002, 1, 22), Genero.FEMININO, 1.60f, 58, 2000,
                 "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
                 Moradia.COM_FAMILIA);
+        pessoa3 = new Pessoa("Raphael", LocalDate.of(1996, 6, 7), Genero.MASCULINO, 1.72f, 80, 5000,
+                "MG", Hobby.GAME, EstadoCivil.CASADO, Escolaridade.MEDIO, false, Moradia.ALUGUEL);
+        pessoa4 = new Pessoa("Ana", LocalDate.of(2023, 10, 15), Genero.FEMININO, 1.65f, 63, 1200,
+                "GO", Hobby.ARTE, EstadoCivil.VIUVO, Escolaridade.NENHUMA, true,
+                Moradia.COM_FAMILIA);
+        pessoa5 = new Pessoa("Pedro", LocalDate.of(1995, 3, 25), Genero.MASCULINO, 1.88f, 78, 1500,
+                "PR", Hobby.LIVRO, EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
+                Moradia.COM_FAMILIA);
         dataset.addPessoa(pessoa1);
         dataset.addPessoa(pessoa2);
-    }
+        dataset.addPessoa(pessoa3);
+        dataset.addPessoa(pessoa4);
 
-    private int getNumPessoas(Pessoa[] pessoas) {
-        int contPessoa = 0;
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa != null && pessoa.getNome() != null) {
-                contPessoa++;
-            }
-        }
-        return contPessoa;
     }
 
     @Test
     void testAddPessoa() {
+        dataset.addPessoa(pessoa5);
 
         Pessoa[] pessoas = dataset.getAll();
-        assertEquals(2, getNumPessoas(pessoas), "Valor valido de pessoa");
+        assertEquals(5, dataset.size(), "Valor valido de pessoa");
     }
 
     @Test
     void testAvgAltura() {
-
-        assertEquals(1.7f, dataset.avgAltura(), "Valor valido de altura");
+        float delta = 0.01f;
+        assertEquals(1.69f, dataset.avgAltura(), delta, "Valor valido de altura");
 
     }
 
     @Test
     void testAvgPeso() {
 
-        assertEquals(62, dataset.avgPeso(), "Valor valido de altura");
+        assertEquals(67, dataset.avgPeso(), "Valor valido de altura");
 
     }
 
@@ -68,122 +74,143 @@ public class DatasetTest {
         Pessoa[] pessoas = dataset.getAll();
         assertEquals(pessoa1, pessoas[0], "Valor valido de pessoas");
         assertEquals(pessoa2, pessoas[1], "Valor valido de pessoas");
+        assertEquals(pessoa3, pessoas[2], "Valor valido de pessoas");
+        assertEquals(pessoa4, pessoas[3], "Valor valido de pessoas");
+
 
     }
 
     @Test
     void testGetPessoaByName() {
 
-    
-        assertEquals("Mikael", dataset.getPessoaByName("mikael"), "Valor valido de pessoa");
+        assertEquals(pessoa1, dataset.getPessoaByName(pessoa1.getNome()), "Valor valido de pessoa");
 
     }
 
     @Test
     void testMaxAltura() {
-        fail("Not yet implemented");
+        assertEquals(1.80f, dataset.maxAltura(), "Valor valido para altura maxima");
+    }
+
+    @Test
+    void testMinAltura() {
+        assertEquals(1.60f, dataset.minAltura(), "Valor valido para altura minima");
 
     }
 
     @Test
     void testMaxPeso() {
-        fail("Not yet implemented");
+        assertEquals(80, dataset.maxPeso(), "Valor valido para peso maximo");
 
     }
 
-    @Test
-    void testMinAltura() {
-        fail("Not yet implemented");
-
-    }
 
     @Test
     void testMinPeso() {
-        fail("Not yet implemented");
+        assertEquals(58, dataset.minPeso(), "Valor valido para peso minimo");
 
     }
 
     @Test
     void testModeEscolaridade() {
-        fail("Not yet implemented");
+        assertEquals(Escolaridade.SUPERIOR, dataset.modeEscolaridade(),
+                "Valor valido para moda escolaridade");
 
     }
 
     @Test
     void testModeEstadoCivil() {
-        fail("Not yet implemented");
+        assertEquals(EstadoCivil.SOLTEIRO, dataset.modeEstadoCivil(),
+                "Valor valido para moda estado civil");
 
     }
 
     @Test
     void testModeMoradia() {
-        fail("Not yet implemented");
+        assertEquals(Moradia.COM_FAMILIA, dataset.modeMoradia(), "Valor valido para moda moradia");
 
     }
 
     @Test
     void testPercentAdult() {
-        fail("Not yet implemented");
+        assertEquals(75f, dataset.percentAdult(), "Valor valido para porcentagem adulto");
 
     }
 
     @Test
     void testPercentEscolaridade() {
-        fail("Not yet implemented");
+        assertEquals(50f, dataset.percentEscolaridade(Escolaridade.SUPERIOR),
+                "Valor valido para porcentagem escolaridade");
 
     }
 
     @Test
     void testPercentEstadoCivil() {
-        fail("Not yet implemented");
-
+        assertEquals(25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
+                "Valor valido para porcentagem estado civil");
     }
 
     @Test
-    void testPercentFeliz() {
-        fail("Not yet implemented");
+    void testPercentMoradia() {
+        assertEquals(25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
+                "Valor valido para porcentagem moradia");
 
     }
 
     @Test
     void testPercentHobby() {
-        fail("Not yet implemented");
+        assertEquals(50f, dataset.percentHobby(Hobby.GAME), "Valor valido para porcentagem hobby");
 
     }
+
 
     @Test
-    void testPercentMoradia() {
-        fail("Not yet implemented");
+    void testPercentFeliz() {
+        assertEquals(75f, dataset.percentFeliz(), "Valor valido para porcentagem feliz");
 
     }
 
-    @Test
-    void testRemoveAll() {
-        fail("Not yet implemented");
 
-    }
-
-    @Test
-    void testRemovePessoa() {
-        fail("Not yet implemented");
-
-    }
-
-    @Test
-    void testRemovePessoaByName() {
-        fail("Not yet implemented");
-
-    }
 
     @Test
     void testReplacePessoa() {
-        fail("Not yet implemented");
+        Pessoa[] pessoasAntes = dataset.getAll();
+        dataset.replacePessoa(pessoa4, pessoa5);
+
+
+        assertEquals(pessoa5, pessoasAntes[3], "Valor valido para alterar pessoa");
 
     }
 
     @Test
     void testSize() {
-        fail("Not yet implemented");
+
+        assertEquals(4, dataset.size(), "Valor valido para tamanho");
 
     }
+
+    @Test
+    void testRemovePessoaByName() {
+        
+        dataset.removePessoaByName(pessoa2.getNome());
+        assertEquals(3, dataset.size(), "Valor valido para remocao");
+       
+
+    }
+
+    @Test
+    void testRemovePessoa() {
+        dataset.removePessoa(pessoa2);
+        assertEquals(3, dataset.size(), "Valor valido para remocao por pessoa");
+
+    }
+
+    @Test
+    void testRemoveAll() {
+        dataset.removeAll();
+        assertEquals(0, dataset.size(), "Valor valido para remocao total");
+    }
+
+
+
 }
