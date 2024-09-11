@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import br.lpm.business.Dataset;
+import br.lpm.business.DistanceMeasure;
 import br.lpm.business.Escolaridade;
 import br.lpm.business.EstadoCivil;
 import br.lpm.business.Genero;
@@ -19,25 +20,34 @@ public class DatasetTest {
     public static Pessoa pessoa3;
     public static Pessoa pessoa4;
     public static Pessoa pessoa5;
+    public static Pessoa pessoa6;
+
+    public DistanceMeasure distanceMeasure;
 
 
 
     @BeforeEach
     public void setUp() throws Exception {
         dataset = new Dataset();
-        pessoa1 = new Pessoa("Mikael", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.80f, 65, 3000,
-                "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+        distanceMeasure = new DistanceMeasure(dataset);
+
+        pessoa1 = new Pessoa("Mikael Muniz", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.80f, 65,
+                3000, "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
                 Moradia.COM_FAMILIA);
-        pessoa2 = new Pessoa("Barbara", LocalDate.of(2002, 1, 22), Genero.FEMININO, 1.60f, 58, 2000,
-                "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+        pessoa2 = new Pessoa("Barbara Costa", LocalDate.of(2002, 1, 22), Genero.FEMININO, 1.60f, 58,
+                2000, "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
                 Moradia.COM_FAMILIA);
-        pessoa3 = new Pessoa("Raphael", LocalDate.of(1996, 6, 7), Genero.MASCULINO, 1.72f, 80, 5000,
-                "MG", Hobby.GAME, EstadoCivil.CASADO, Escolaridade.MEDIO, false, Moradia.ALUGUEL);
-        pessoa4 = new Pessoa("Ana", LocalDate.of(2023, 10, 15), Genero.FEMININO, 1.65f, 63, 1200,
-                "GO", Hobby.ARTE, EstadoCivil.VIUVO, Escolaridade.NENHUMA, true,
+        pessoa3 = new Pessoa("Raphael Henrique", LocalDate.of(1996, 6, 7), Genero.MASCULINO, 1.72f,
+                80, 5000, "MG", Hobby.GAME, EstadoCivil.CASADO, Escolaridade.MEDIO, false,
+                Moradia.ALUGUEL);
+        pessoa4 = new Pessoa("Ana Machado", LocalDate.of(2023, 10, 15), Genero.FEMININO, 1.65f, 63,
+                1200, "GO", Hobby.ARTE, EstadoCivil.VIUVO, Escolaridade.NENHUMA, true,
                 Moradia.COM_FAMILIA);
-        pessoa5 = new Pessoa("Pedro", LocalDate.of(1995, 3, 25), Genero.MASCULINO, 1.88f, 78, 1500,
-                "PR", Hobby.LIVRO, EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
+        pessoa5 = new Pessoa("Pedro Henrique", LocalDate.of(1995, 3, 25), Genero.MASCULINO, 1.88f,
+                78, 1500, "PR", Hobby.LIVRO, EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
+                Moradia.COM_FAMILIA);
+        pessoa6 = new Pessoa("Dante Miguel", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.75f, 68,
+                2800, "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.POS_GRADUACAO, true,
                 Moradia.COM_FAMILIA);
         dataset.addPessoa(pessoa1);
         dataset.addPessoa(pessoa2);
@@ -83,7 +93,7 @@ public class DatasetTest {
     @Test
     void testGetPessoaByName() {
 
-        assertEquals(pessoa1, dataset.getPessoaByName(pessoa1.getNome()), "Valor valido de pessoa");
+        assertEquals(pessoa1, dataset.getPessoaByName("Mikael Muniz"), "Valor valido de pessoa");
 
     }
 
@@ -109,6 +119,16 @@ public class DatasetTest {
     void testMinPeso() {
         assertEquals(58, dataset.minPeso(), "Valor valido para peso minimo");
 
+    }
+
+    @Test
+    void testMaxRenda() {
+        assertEquals(5000, dataset.maxRenda(), 0.01f, "Valor valido para maxima renda");
+    }
+
+    @Test
+    void testMinRenda() {
+        assertEquals(1200, dataset.minRenda(), 0.01f, "Valor valido para minima renda");
     }
 
     @Test
@@ -191,10 +211,10 @@ public class DatasetTest {
 
     @Test
     void testRemovePessoaByName() {
-        
+
         dataset.removePessoaByName(pessoa2.getNome());
         assertEquals(3, dataset.size(), "Valor valido para remocao");
-       
+
 
     }
 
@@ -211,6 +231,77 @@ public class DatasetTest {
         assertEquals(0, dataset.size(), "Valor valido para remocao total");
     }
 
+    @Test
+    void testNormalizeField() {
+        dataset.addPessoa(pessoa5);
 
+        dataset.normalizeField("altura");
+        dataset.normalizeField("peso");
+        dataset.normalizeField("renda");
+        assertEquals(0.71f, dataset.getPessoaByName("Mikael Muniz").getAltura(), 0.01f,
+                "Valor valido para altura");
+        assertEquals(0.32f, dataset.getPessoaByName("Mikael Muniz").getPeso(), 0.01f,
+                "Valor valido para peso");
+        assertEquals(0.47f, dataset.getPessoaByName("Mikael Muniz").getRenda(), 0.01f,
+                "Valor valido para renda");
+
+        assertEquals(0, dataset.getPessoaByName("Barbara Costa").getAltura(), 0.01f,
+                "Valor valido para altura");
+        assertEquals(0, dataset.getPessoaByName("Barbara Costa").getPeso(), 0.01f,
+                "Valor valido para peso");
+        assertEquals(0.21f, dataset.getPessoaByName("Barbara Costa").getRenda(), 0.01f,
+                "Valor valido para renda");
+
+    }
+
+    @Test
+    void testcalcDistanceVector() {
+        dataset.addPessoa(pessoa5);
+
+        dataset.normalizeField("altura");
+        dataset.normalizeField("peso");
+        dataset.normalizeField("renda");
+        double[] distanceVector = dataset.calcDistanceVector(pessoa1);
+
+        assertEquals(distanceVector[0], distanceMeasure.calcDistance(pessoa1, pessoa1),
+                "Valor valido para distancia vetor");
+        assertEquals(distanceVector[1], distanceMeasure.calcDistance(pessoa1, pessoa2),
+                "Valor valido para distancia vetor");
+        assertEquals(distanceVector[2], distanceMeasure.calcDistance(pessoa1, pessoa3),
+                "Valor valido para distancia vetor");
+    }
+
+    @Test
+    void testCalcDistanceMatrix() {
+        dataset.addPessoa(pessoa5);
+
+        dataset.normalizeField("altura");
+        dataset.normalizeField("peso");
+        dataset.normalizeField("renda");
+
+        double[][] distances = dataset.calcDistanceMatrix();
+        assertEquals(distances[0][1], distanceMeasure.calcDistance(pessoa1, pessoa2),
+                "Valor valido para distancia linha 0 e coluna 1");
+        assertEquals(distances[0][2], distanceMeasure.calcDistance(pessoa1, pessoa3),
+                "Valor valido para distancia linha 0 e coluna 1");
+        assertEquals(distances[0][3], distanceMeasure.calcDistance(pessoa1, pessoa4),
+                "Valor valido para distancia linha 0 e coluna 1");
+
+    }
+
+    @Test
+    void testGetSimilar() {
+        dataset.addPessoa(pessoa5);
+        dataset.addPessoa(pessoa6);
+
+
+        dataset.normalizeField("altura");
+        dataset.normalizeField("peso");
+        dataset.normalizeField("renda");
+
+        Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa2, 1);
+
+        assertEquals(pessoa3, pessoasSimilares[0], "Valor valido para pessoa similar");
+    }
 
 }

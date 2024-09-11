@@ -10,7 +10,7 @@ public class Pessoa {
     private LocalDate dataNascimento;
     private Genero genero;
     private float altura;
-    private int peso;
+    private float peso;
     private float renda;
     private String naturalidade;
     private Hobby hobby;
@@ -78,7 +78,7 @@ public class Pessoa {
     }
 
     public void setAltura(float altura) {
-        if (altura < 2.6 && altura > 0) {
+        if (altura < 2.6 && altura >= 0) {
             this.altura = altura;
             return;
         }
@@ -87,13 +87,13 @@ public class Pessoa {
 
     }
 
-    public int getPeso() {
+    public float getPeso() {
         return peso;
     }
 
-    public void setPeso(int peso) {
-        if (peso > 0 && peso < 600) {
-            this.peso = peso;
+    public void setPeso(float pesoNormalizado) {
+        if (pesoNormalizado >= 0 && pesoNormalizado < 600) {
+            this.peso = pesoNormalizado;
             return;
         }
         this.peso = 1;
@@ -173,7 +173,7 @@ public class Pessoa {
         return idade >= MAIOR_IDADE;
     }
 
-    public Pessoa(String nome, LocalDate dataNascimento, Genero genero, float altura, int peso,
+    public Pessoa(String nome, LocalDate dataNascimento, Genero genero, float altura, float peso,
             float renda, String naturalidade, Hobby hobby, EstadoCivil estadoCivil,
             Escolaridade escolaridade, boolean feliz, Moradia moradia) {
         this.setNome(nome);
