@@ -57,18 +57,20 @@ public class Main {
                 dataset.addPessoa(pessoa6);
 
                 int n = 2;
-                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa2, n);
+                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, 1);
 
                 for (int i = 0; i < n; i++) {
-                        System.out.println("A pessoa " + pessoa2.getNome() +
-                                        " possui similiraidade entre " + pessoa6.getNome() + " e "
-                                        + pessoasSimilares[i].getNome() + ", sendo a distancia igual a "
-                                        + distanceMeasure.calcDistance(pessoa6,
+
+                        System.out.println("A pessoa " + pessoa1.getNome()
+                                        + " possui similiraidade entre " + pessoasSimilares[i].getNome()
+                                        + ", sendo a distancia igual a "
+                                        + distanceMeasure.calcDistance(pessoa1,
                                                         pessoasSimilares[i]));
+
                 }
 
-                 histogramFormacaoAcademica(dataset);
-                 pieFormacaoAcademica(dataset);
+                histogramFormacaoAcademica(dataset);
+                pieFormacaoAcademica(dataset);
 
 
         }

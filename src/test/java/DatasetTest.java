@@ -299,9 +299,10 @@ public class DatasetTest {
         dataset.normalizeField("peso");
         dataset.normalizeField("renda");
 
-        Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa2, 1);
+        Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, 1);
 
-        assertEquals(pessoa3, pessoasSimilares[0], "Valor valido para pessoa similar");
+        assertEquals(pessoa6, pessoasSimilares[0], "Valor valido para pessoa similar");
+
     }
 
 }

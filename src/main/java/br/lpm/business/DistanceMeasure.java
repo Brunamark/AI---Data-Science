@@ -20,23 +20,23 @@ public class DistanceMeasure {
         float distanceIncome = 0;
         float distance = 0;
 
-        if (first.getEscolaridade().equals(second.getEscolaridade())) {
-            distanceEnumBoolean += 1;
-        }
-        if (first.getEstadoCivil().equals(second.getEstadoCivil())) {
-            distanceEnumBoolean += 1;
-        }
-        if (first.getGenero().equals(second.getGenero())) {
-            distanceEnumBoolean += 1;
-        }
-        if (first.getHobby().equals(second.getHobby())) {
-            distanceEnumBoolean += 1;
-        }
-        if (first.getMoradia().equals(second.getMoradia())) {
+        if (!first.getEscolaridade().equals(second.getEscolaridade())) {
             distanceEnumBoolean += 1;
         }
 
-        if (first.isFeliz() == second.isFeliz()) {
+        if (!first.getEstadoCivil().equals(second.getEstadoCivil())) {
+            distanceEnumBoolean += 1;
+        }
+        if (!first.getGenero().equals(second.getGenero())) {
+            distanceEnumBoolean += 1;
+        }
+        if (!first.getHobby().equals(second.getHobby())) {
+            distanceEnumBoolean += 1;
+        }
+        if (!first.getMoradia().equals(second.getMoradia())) {
+            distanceEnumBoolean += 1;
+        }
+        if (!first.isFeliz() == second.isFeliz()) {
             distanceEnumBoolean += 1;
         } else {
             distanceEnumBoolean += 0;

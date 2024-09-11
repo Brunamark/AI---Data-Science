@@ -538,22 +538,38 @@ public class Dataset {
     }
 
     public Pessoa[] getSimilar(Pessoa pessoa, int n) {
-
-    if(quantidadePessoasCadastradas > 0 && n <= quantidadePessoasCadastradas && n>0){
-        Pessoa[] pessoasSimilares = new Pessoa[quantidadePessoasCadastradas];
-        int index = 0;
-        for(int i=0; i<quantidadePessoasCadastradas; i++){
-            if(distanceMeasure.calcDistance(pessoas[i], pessoa)<=0.5 && pessoas[i] != pessoa){
+        if (quantidadePessoasCadastradas <= 0 || n <= 0 || n > quantidadePessoasCadastradas) {
+            return new Pessoa[0];
+        }
+            int index = 0;
+            for (int i = 0; i < quantidadePessoasCadastradas; i++) {
+                double distancia = distanceMeasure.calcDistance(pessoas[i], pessoa);
+                if (distancia <= 0.5 && distancia > 0) {
+                    index++;
+                }
+            }
+        
+        if (index == 0) {
+            return new Pessoa[0];
+        }
+        Pessoa[] pessoasSimilares = new Pessoa[Math.min(index, n)];
+        index = 0;
+        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
+            double distancia = distanceMeasure.calcDistance(pessoas[i], pessoa);
+            if (distancia <= 0.5 && distancia > 0) {
                 pessoasSimilares[index] = pessoas[i];
                 index++;
-                
+                if (index >= pessoasSimilares.length) {
+                    break; 
+                }
             }
         }
+        
         return pessoasSimilares;
-    }
-    return new Pessoa[0];
 
     }
+
+    
 
 }
 
