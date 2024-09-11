@@ -1,6 +1,7 @@
 package br.lpm.main;
 
 import br.lpm.business.Dataset;
+import br.lpm.business.DistanceMeasure;
 import br.lpm.business.Escolaridade;
 import br.lpm.business.EstadoCivil;
 import br.lpm.business.Genero;
@@ -23,32 +24,51 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class Main {
         public static void main(String[] args) throws Exception {
                 Dataset dataset = new Dataset();
-                Pessoa pessoa1 = new Pessoa("Mikael", LocalDate.of(2001, 1, 17), Genero.MASCULINO,
-                                1.80f, 65, 3000, "SP", Hobby.GAME, EstadoCivil.SOLTEIRO,
-                                Escolaridade.SUPERIOR, true, Moradia.COM_FAMILIA);
-                Pessoa pessoa2 = new Pessoa("Barbara", LocalDate.of(2002, 1, 22), Genero.FEMININO,
-                                1.60f, 58, 2000, "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO,
-                                Escolaridade.SUPERIOR, true, Moradia.COM_FAMILIA);
-                Pessoa pessoa3 = new Pessoa("Raphael", LocalDate.of(1996, 6, 7), Genero.MASCULINO,
-                                1.72f, 80, 5000, "MG", Hobby.GAME, EstadoCivil.CASADO,
-                                Escolaridade.MEDIO, false, Moradia.ALUGUEL);
-                Pessoa pessoa4 = new Pessoa("Ana", LocalDate.of(2023, 10, 15), Genero.FEMININO,
-                                1.65f, 63, 1200, "GO", Hobby.ARTE, EstadoCivil.VIUVO,
-                                Escolaridade.NENHUMA, true, Moradia.COM_FAMILIA);
-                Pessoa pessoa5 = new Pessoa("Pedro", LocalDate.of(1995, 3, 25), Genero.MASCULINO,
-                                1.88f, 78, 1500, "PR", Hobby.LIVRO, EstadoCivil.CASADO,
-                                Escolaridade.POS_GRADUACAO, false, Moradia.COM_FAMILIA);
+                DistanceMeasure distanceMeasure = new DistanceMeasure(dataset);
+
+                Pessoa pessoa1 = new Pessoa("Mikael Muniz", LocalDate.of(2001, 1, 17),
+                                Genero.MASCULINO, 1.80f, 65, 3000, "SP", Hobby.GAME,
+                                EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+                                Moradia.COM_FAMILIA);
+                Pessoa pessoa2 = new Pessoa("Barbara Costa", LocalDate.of(2002, 1, 22),
+                                Genero.FEMININO, 1.60f, 58, 2000, "MG", Hobby.CULINARIA,
+                                EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+                                Moradia.COM_FAMILIA);
+                Pessoa pessoa3 = new Pessoa("Raphael Henrique", LocalDate.of(1996, 6, 7),
+                                Genero.MASCULINO, 1.72f, 80, 5000, "MG", Hobby.GAME,
+                                EstadoCivil.CASADO, Escolaridade.MEDIO, false, Moradia.ALUGUEL);
+                Pessoa pessoa4 = new Pessoa("Ana Machado", LocalDate.of(2023, 10, 15),
+                                Genero.FEMININO, 1.65f, 63, 1200, "GO", Hobby.ARTE,
+                                EstadoCivil.VIUVO, Escolaridade.NENHUMA, true, Moradia.COM_FAMILIA);
+                Pessoa pessoa5 = new Pessoa("Pedro Henrique", LocalDate.of(1995, 3, 25),
+                                Genero.MASCULINO, 1.88f, 78, 1500, "PR", Hobby.LIVRO,
+                                EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
+                                Moradia.COM_FAMILIA);
+                Pessoa pessoa6 = new Pessoa("Dante Miguel", LocalDate.of(2001, 1, 17),
+                                Genero.MASCULINO, 1.75f, 68, 2800, "SP", Hobby.GAME,
+                                EstadoCivil.SOLTEIRO, Escolaridade.POS_GRADUACAO, true,
+                                Moradia.COM_FAMILIA);
 
                 dataset.addPessoa(pessoa1);
                 dataset.addPessoa(pessoa2);
                 dataset.addPessoa(pessoa3);
                 dataset.addPessoa(pessoa4);
                 dataset.addPessoa(pessoa5);
+                dataset.addPessoa(pessoa6);
 
-                dataset.removePessoaByName("Pedro");
+                int n = 2;
+                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa2, n);
 
-                histogramFormacaoAcademica(dataset);
-                pieFormacaoAcademica(dataset);
+                for (int i = 0; i < n; i++) {
+                        System.out.println("A pessoa " + pessoa2.getNome() +
+                                        " possui similiraidade entre " + pessoa6.getNome() + " e "
+                                        + pessoasSimilares[i].getNome() + ", sendo a distancia igual a "
+                                        + distanceMeasure.calcDistance(pessoa6,
+                                                        pessoasSimilares[i]));
+                }
+
+                 histogramFormacaoAcademica(dataset);
+                 pieFormacaoAcademica(dataset);
 
 
         }
@@ -56,7 +76,7 @@ public class Main {
         private static void histogramFormacaoAcademica(Dataset dataset) {
                 DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
-              
+
                 int fundamental = 0;
                 int medio = 0;
                 int superior = 0;
@@ -107,26 +127,19 @@ public class Main {
         private static void pieFormacaoAcademica(Dataset dataset) {
 
                 DefaultPieDataset datasetPie = new DefaultPieDataset();
-        
+
                 for (Escolaridade escolaridade : Escolaridade.values()) {
-                    float percent = dataset.percentEscolaridade(escolaridade);
-                    datasetPie.setValue(escolaridade.toString(), percent);
+                        float percent = dataset.percentEscolaridade(escolaridade);
+                        datasetPie.setValue(escolaridade.toString(), percent);
                 }
-                
-                JFreeChart pieChart = ChartFactory.createPieChart(
-                    "Distribuição de Escolaridade", 
-                    datasetPie, 
-                    datasetPie, 0, true, 
-                    true, 
-                    false, 
-                    false 
-, false, false
-                );
-        
+
+                JFreeChart pieChart = ChartFactory.createPieChart("Distribuição de Escolaridade",
+                                datasetPie, datasetPie, 0, true, true, false, false, false, false);
+
                 ChartPanel chartPanel = new ChartPanel(pieChart);
                 chartPanel.setPreferredSize(new Dimension(560, 370));
-        
-               
+
+
                 JFrame frame = new JFrame();
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setTitle("Gráfico de Distribuição de Escolaridade");
