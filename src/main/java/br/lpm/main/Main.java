@@ -56,9 +56,12 @@ public class Main {
                 dataset.addPessoa(pessoa5);
                 dataset.addPessoa(pessoa6);
 
-                int n = 2;
-                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, 1);
+                histogramFormacaoAcademica(dataset);
+                pieFormacaoAcademica(dataset);
 
+                int n = 1;
+                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, n);
+ 
                 for (int i = 0; i < n; i++) {
 
                         System.out.println("A pessoa " + pessoa1.getNome()
@@ -69,8 +72,7 @@ public class Main {
 
                 }
 
-                histogramFormacaoAcademica(dataset);
-                pieFormacaoAcademica(dataset);
+              
 
 
         }

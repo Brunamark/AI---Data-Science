@@ -1,576 +1,418 @@
 package br.lpm.business;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+
+
 
 public class Dataset {
-    static final int MAX_PESSOAS = 1000;
-    private int quantidadePessoasCadastradas = 0;
+    private static final int NOT_FOUND = -1;
+    private static final int MAX_PESSOAS = 1000;
     private Pessoa[] pessoas = new Pessoa[MAX_PESSOAS];
-    private DistanceMeasure distanceMeasure;
+    private int numPessoas = 0;
 
-    public Dataset() {
-        this.distanceMeasure = new DistanceMeasure(this);
+    private int searchPessoaByName(String nome) {
+        for (int pos = 0; pos < numPessoas; pos++) {
+            if (pessoas[pos].getNome().equalsIgnoreCase(nome)) {
+                return pos;
+            }
+        }
+        return NOT_FOUND;
     }
 
     public void addPessoa(Pessoa pessoa) {
-        if (quantidadePessoasCadastradas < MAX_PESSOAS) {
-            pessoas[quantidadePessoasCadastradas] = pessoa;
-            quantidadePessoasCadastradas++;
+        if (numPessoas < MAX_PESSOAS) {
+            pessoas[numPessoas++] = pessoa;
         }
-
     }
 
     public void removePessoa(Pessoa pessoa) {
-        if (pessoa == null) {
-            return;
-        }
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null && pessoas[i] == pessoa) {
-                for (int j = i; j < quantidadePessoasCadastradas - 1; j++) {
-                    pessoas[j] = pessoas[j + 1];
+        for (int pos = 0; pos < numPessoas; pos++) {
+            if (pessoas[pos].equals(pessoa)) {
+                for (int i = pos + 1; i < numPessoas; i++) {
+                    pessoas[i - 1] = pessoas[i];
                 }
-                pessoas[quantidadePessoasCadastradas - 1] = null;
-                return;
+                pessoas[--numPessoas] = null;
             }
         }
     }
 
-    public void removePessoaByName(String nome) {
-
-        if (nome == null) {
-            return;
-        }
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-
-            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(nome)) {
-                for (int j = i; j < quantidadePessoasCadastradas - 1; j++) {
-                    pessoas[j] = pessoas[j + 1];
-                }
-                pessoas[quantidadePessoasCadastradas - 1] = null;
-                return;
+    public void removePessoaByName(String pessoa) {
+        int pos = searchPessoaByName(pessoa);
+        if (pos != NOT_FOUND) {
+            for (int i = pos + 1; i < numPessoas; i++) {
+                pessoas[i - 1] = pessoas[i];
             }
+            pessoas[--numPessoas] = null;
         }
-
     }
 
     public void replacePessoa(Pessoa oldPessoa, Pessoa newPessoa) {
-        if (oldPessoa == null || newPessoa == null) {
-            return;
-        }
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null && pessoas[i].equals(oldPessoa)) {
-                pessoas[i] = newPessoa;
-            }
+        int pos = searchPessoaByName(oldPessoa.getNome());
+        if (pos != NOT_FOUND) {
+            pessoas[pos] = newPessoa;
         }
     }
 
     public Pessoa getPessoaByName(String nome) {
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null && pessoas[i].getNome().equalsIgnoreCase(nome)) {
-                return pessoas[i];
-            }
+        int pos = searchPessoaByName(nome);
+        if (pos != NOT_FOUND) {
+            return pessoas[pos];
+        } else {
+            return null;
         }
-        return null;
     }
-
 
     public Pessoa[] getAll() {
         return pessoas;
     }
 
     public void removeAll() {
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
+        for (int i = 0; i < numPessoas; i++) {
             pessoas[i] = null;
         }
+        numPessoas = 0;
     }
 
     public int size() {
-        int index = 0;
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa != null) {
-                index++;
-            }
-        }
-        return index;
+        return numPessoas;
     }
 
     public float maxAltura() {
-        float menor = 0;
-        float maior = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                menor = pessoas[i].getAltura();
-                if (maior < menor) {
-                    maior = menor;
-                }
+        float max = Float.NEGATIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (max < pessoas[i].getAltura()) {
+                max = pessoas[i].getAltura();
             }
         }
-        return maior;
+        return max;
     }
 
     public float minAltura() {
-        float menor = Float.MAX_VALUE;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                float alturaAtual = pessoas[i].getAltura();
-                if (alturaAtual < menor) {
-                    menor = alturaAtual;
-                }
+        float min = Float.POSITIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (min > pessoas[i].getAltura()) {
+                min = pessoas[i].getAltura();
             }
         }
-        return (menor == Float.MAX_VALUE) ? 0 : menor;
-    }
-
-    public float minRenda() {
-        float menor = Float.MAX_VALUE;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                float rendaAtual = pessoas[i].getRenda();
-                if (rendaAtual < menor) {
-                    menor = rendaAtual;
-                }
-            }
-        }
-        return (menor == Float.MAX_VALUE) ? 0 : menor;
-    }
-
-    public float maxRenda() {
-        if (quantidadePessoasCadastradas > 0) {
-            float maiorRenda = pessoas[0].getRenda();
-            for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                if (pessoas[i].getRenda() > maiorRenda) {
-                    maiorRenda = pessoas[i].getRenda();
-                }
-            }
-            return maiorRenda;
-        }
-        return 0;
+        return min;
     }
 
     public float avgAltura() {
-        float media = 0;
-        int index = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                media += pessoas[i].getAltura();
-                index++;
+        float sum = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            sum += pessoas[i].getAltura();
+        }
+        return sum / numPessoas;
+    }
+ 
+    public float maxPeso() {
+        float max = Float.NEGATIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (max < pessoas[i].getPeso()) {
+                max = pessoas[i].getPeso();
             }
         }
-        return (index == 0) ? 0 : media / index;
+        return max;
     }
 
-    public int maxPeso() {
-        float menor = 0;
-        float maior = 0;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                menor = pessoas[i].getPeso();
-                if (maior < menor) {
-                    maior = menor;
-                }
+    public float minPeso() {
+        float min = Float.POSITIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (min > pessoas[i].getPeso()) {
+                min = pessoas[i].getPeso();
             }
         }
-        return Math.round(maior);
+        return min;
     }
 
-    public int minPeso() {
-        float menor = Float.MAX_VALUE;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                float pesoAtual = pessoas[i].getPeso();
-                if (pesoAtual < menor) {
-                    menor = pesoAtual;
-                }
-            }
+    public float avgPeso() {
+        float sum = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            sum += pessoas[i].getPeso();
         }
-        return Math.round(menor);
+        return sum / numPessoas;
     }
 
-    public int avgPeso() {
-        float media = 0;
-        int contPeso = 0;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                media += pessoas[i].getPeso();
-                contPeso++;
+    public float percentAdulto() {
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].isAdulto()) {
+                count++;
             }
         }
-        return (contPeso == 0) ? 0 : Math.round(media / contPeso);
-
+        return ((float) count) / numPessoas;
     }
 
-    public float percentAdult() {
-        int contagemAdulto = 0;
-        int totalPessoasValidas = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalPessoasValidas++;
-                if (pessoas[i].isAdulto()) {
-                    contagemAdulto++;
-                }
+    public float maxRenda() {
+        float max = Float.NEGATIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (max < pessoas[i].getRenda()) {
+                max = pessoas[i].getRenda();
             }
         }
-
-        if (totalPessoasValidas == 0) {
-            return 0.0f;
-        }
-
-        return ((float) contagemAdulto / totalPessoasValidas) * 100;
+        return max;
     }
 
-    public float percentEstadoCivil(EstadoCivil estadoCivil) {
-        int contagemEstadoCivil = 0;
-        int totalEstadoCivilValidos = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalEstadoCivilValidos++;
-                if (pessoas[i].getEstadoCivil() == estadoCivil) {
-                    contagemEstadoCivil++;
-                }
+    public float minRenda() {
+        float min = Float.POSITIVE_INFINITY;
+        for (int i = 0; i < numPessoas; i++) {
+            if (min > pessoas[i].getRenda()) {
+                min = pessoas[i].getRenda();
             }
         }
-        if (totalEstadoCivilValidos == 0) {
-            return 0.0f;
-        }
+        return min;
+    }
 
-        return ((float) contagemEstadoCivil / totalEstadoCivilValidos) * 100;
+    public float avgRenda() {
+        float sum = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            sum += pessoas[i].getRenda();
+        }
+        return sum / numPessoas;
+    }
+
+    public float percentGenero(Genero genero) {
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].getGenero().equals(genero)) {
+                count++;
+            }
+        }
+        return ((float) count) / numPessoas;
+    }
+
+    public Genero modeGenero() {
+        Genero[] values = Genero.values();
+        int[] count = new int[values.length];
+        int currentMax = -1;
+        Genero currentValue = null;
+
+        for (int i = 0; i < numPessoas; i++) {
+            int val = pessoas[i].getGenero().getValue();
+            count[val]++;
+            if (count[val] > currentMax) {
+                currentMax = count[val];
+                currentValue = pessoas[i].getGenero();
+            }
+        }
+        return currentValue;
+    }
+
+   public float percentEstadoCivil(EstadoCivil estadoCivil) {
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].getEstadoCivil().equals(estadoCivil)) {
+                count++;
+            }
+        }
+        return ((float) count) / numPessoas;
     }
 
     public EstadoCivil modeEstadoCivil() {
-        int solteiro = 0;
-        int casado = 0;
-        int divorciado = 0;
-        int separado = 0;
-        int viuvo = 0;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null && pessoas[i].getEstadoCivil() != null) {
-                switch (pessoas[i].getEstadoCivil()) {
-                    case SOLTEIRO:
-                        solteiro++;
-                        break;
-                    case CASADO:
-                        casado++;
-                        break;
-                    case DIVORCIADO:
-                        divorciado++;
-                        break;
-                    case SEPARADO:
-                        separado++;
-                        break;
-                    case VIUVO:
-                        viuvo++;
-                        break;
-                }
+        EstadoCivil[] values = EstadoCivil.values();
+        int[] count = new int[values.length];
+        int currentMax = -1;
+        EstadoCivil currentValue = null;
+
+        for (int i = 0; i < numPessoas; i++) {
+            int val = pessoas[i].getEstadoCivil().getValue();
+            count[val]++;
+            if (count[val] > currentMax) {
+                currentMax = count[val];
+                currentValue = pessoas[i].getEstadoCivil();
             }
         }
-        EstadoCivil modo = EstadoCivil.SOLTEIRO;
-        int contagemMaxima = solteiro;
-
-        if (casado > contagemMaxima) {
-            modo = EstadoCivil.CASADO;
-            contagemMaxima = casado;
-        }
-        if (divorciado > contagemMaxima) {
-            modo = EstadoCivil.DIVORCIADO;
-            contagemMaxima = divorciado;
-        }
-        if (separado > contagemMaxima) {
-            modo = EstadoCivil.SEPARADO;
-            contagemMaxima = separado;
-        }
-        if (viuvo > contagemMaxima) {
-            modo = EstadoCivil.VIUVO;
-        }
-
-        return modo;
+        return currentValue;
     }
 
     public float percentEscolaridade(Escolaridade escolaridade) {
-        int contagemEscolaridade = 0;
-        int totalEscolaridadeValidos = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalEscolaridadeValidos++;
-                if (pessoas[i].getEscolaridade() == escolaridade) {
-                    contagemEscolaridade++;
-                }
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].getEscolaridade().equals(escolaridade)) {
+                count++;
             }
         }
-        if (totalEscolaridadeValidos == 0) {
-            return 0.0f;
-        }
-
-        return ((float) contagemEscolaridade / totalEscolaridadeValidos) * 100;
+        return ((float) count) / numPessoas;
     }
 
     public Escolaridade modeEscolaridade() {
-        int fundamental = 0;
-        int medio = 0;
-        int superior = 0;
-        int posGraduacao = 0;
-        int nenhuma = 0;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null && pessoas[i].getEscolaridade() != null) {
-                Escolaridade escolaridadeAtual = pessoas[i].getEscolaridade();
+        Escolaridade[] values = Escolaridade.values();
+        int[] count = new int[values.length];
+        int currentMax = -1;
+        Escolaridade currentValue = null;
 
-                switch (escolaridadeAtual) {
-                    case FUNDAMENTAL:
-                        fundamental++;
-                        break;
-                    case MEDIO:
-                        medio++;
-                        break;
-                    case SUPERIOR:
-                        superior++;
-                        break;
-                    case POS_GRADUACAO:
-                        posGraduacao++;
-                        break;
-                    case NENHUMA:
-                        nenhuma++;
-                        break;
-                }
+        for (int i = 0; i < numPessoas; i++) {
+            int val = pessoas[i].getEscolaridade().getValue();
+            count[val]++;
+            if (count[val] > currentMax) {
+                currentMax = count[val];
+                currentValue = pessoas[i].getEscolaridade();
             }
-
         }
-        Escolaridade escolaridade = Escolaridade.FUNDAMENTAL;
-        int contagemMaxima = fundamental;
-
-        if (medio > contagemMaxima) {
-            escolaridade = Escolaridade.MEDIO;
-            contagemMaxima = medio;
-        }
-        if (superior > contagemMaxima) {
-            escolaridade = Escolaridade.SUPERIOR;
-            contagemMaxima = superior;
-        }
-        if (posGraduacao > contagemMaxima) {
-            escolaridade = Escolaridade.POS_GRADUACAO;
-            contagemMaxima = posGraduacao;
-        }
-        if (nenhuma > contagemMaxima) {
-            escolaridade = Escolaridade.NENHUMA;
-        }
-
-
-        return escolaridade;
+        return currentValue;
     }
 
     public float percentMoradia(Moradia moradia) {
-        int contagemMoradia = 0;
-        int totalMoradiaValidos = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalMoradiaValidos++;
-                if (pessoas[i].getMoradia() == moradia) {
-                    contagemMoradia++;
-                }
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].getMoradia().equals(moradia)) {
+                count++;
             }
         }
-
-        if (totalMoradiaValidos == 0) {
-            return 0.0f;
-        }
-
-        return ((float) contagemMoradia / totalMoradiaValidos) * 100;
+        return ((float) count) / numPessoas;
     }
 
     public Moradia modeMoradia() {
-        int aluguel = 0;
-        int casaPropria = 0;
-        int comFamilia = 0;
+        Moradia[] values = Moradia.values();
+        int[] count = new int[values.length];
+        int currentMax = -1;
+        Moradia currentValue = null;
 
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                switch (pessoas[i].getMoradia()) {
-                    case ALUGUEL:
-                        aluguel++;
-                        break;
-                    case CASA_PROPRIA:
-                        casaPropria++;
-                        break;
-                    case COM_FAMILIA:
-                        comFamilia++;
-                        break;
-                }
+        for (int i = 0; i < numPessoas; i++) {
+            int val = pessoas[i].getMoradia().getValue();
+            count[val]++;
+            if (count[val] > currentMax) {
+                currentMax = count[val];
+                currentValue = pessoas[i].getMoradia();
             }
         }
-        Moradia moradia = Moradia.ALUGUEL;
-        int contagemMaxima = aluguel;
-
-        if (casaPropria > contagemMaxima) {
-            moradia = Moradia.CASA_PROPRIA;
-            contagemMaxima = casaPropria;
-        }
-        if (comFamilia > contagemMaxima) {
-            moradia = Moradia.COM_FAMILIA;
-        }
-
-        return moradia;
+        return currentValue;
     }
 
     public float percentHobby(Hobby hobby) {
-        int contagemHobby = 0;
-        int totalHobbyValidos = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalHobbyValidos++;
-                if (pessoas[i].getHobby() == hobby) {
-                    contagemHobby++;
-                }
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].getHobby().equals(hobby)) {
+                count++;
             }
         }
-
-        if (totalHobbyValidos == 0) {
-            return 0.0f;
-        }
-
-        return ((float) contagemHobby / totalHobbyValidos) * 100;
+        return ((float) count) / numPessoas;
     }
 
+    public Hobby modeHobby() {
+        Hobby[] values = Hobby.values();
+        int[] count = new int[values.length];
+        int currentMax = -1;
+        Hobby currentValue = null;
+
+        for (int i = 0; i < numPessoas; i++) {
+            int val = pessoas[i].getHobby().getValue();
+            count[val]++;
+            if (count[val] > currentMax) {
+                currentMax = count[val];
+                currentValue = pessoas[i].getHobby();
+            }
+        }
+        return currentValue;
+    }
 
     public float percentFeliz() {
-        int contagemFeliz = 0;
-        int totalFelizValidos = 0;
-
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            if (pessoas[i] != null) {
-                totalFelizValidos++;
-                if (pessoas[i].isFeliz()) {
-                    contagemFeliz++;
-                }
+        int count = 0;
+        for (int i = 0; i < numPessoas; i++) {
+            if (pessoas[i].isFeliz()) {
+                count++;
             }
         }
-
-        if (totalFelizValidos == 0) {
-            return 0.0f;
-        }
-
-        return ((float) contagemFeliz / totalFelizValidos) * 100;
+        return ((float) count) / numPessoas;
     }
 
-    public void normalizeField(String fieldName) {
-        switch (fieldName.toLowerCase()) {
-            case "peso":
-                float maxPeso = maxPeso();
-                float minPeso = minPeso();
-                for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                    if (maxPeso != minPeso) {
-                        float pesoNormalizado =
-                                (pessoas[i].getPeso() - minPeso) / (maxPeso - minPeso);
-                        pessoas[i].setPeso(pesoNormalizado);
-                    } else {
-                        pessoas[i].setPeso(0);
-                    }
-                }
-                break;
-            case "altura":
-                float maxAltura = maxAltura();
-                float minAltura = minAltura();
-                for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                    if (maxAltura != minAltura) {
-                        float alturaNormalizada =
-                                (pessoas[i].getAltura() - minAltura) / (maxAltura - minAltura);
-                        pessoas[i].setAltura(alturaNormalizada);
-                    } else {
-                        pessoas[i].setAltura(0);
-                    }
-                }
+    @Override
+    public String toString() {
+        return Arrays.stream(pessoas).map(Pessoa::getNome).reduce("", (a, b) -> a + b + "\n");
+    }
 
-                break;
+    public void loadDataFromCSV(String filename) throws Exception {
 
-            case "renda":
-                float maxRenda = maxRenda();
-                float minRenda = minRenda();
-                for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                    if (maxRenda != minRenda) {
-                        float rendaNormalizada =
-                                (pessoas[i].getRenda() - minRenda) / (maxRenda - minRenda);
-                        pessoas[i].setRenda(rendaNormalizada);
-                    } else {
-                        pessoas[i].setRenda(0);
-                    }
-                }
-                break;
+        try (BufferedReader file = new BufferedReader(new FileReader(filename))) {
 
-            default:
-                break;
+            // Remove linha de título
+            String line = file.readLine();
+
+            line = file.readLine();
+            
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            DecimalFormat format = new DecimalFormat("0.#");
+            format.setDecimalFormatSymbols(symbols);
+
+            while (line != null && this.numPessoas < Dataset.MAX_PESSOAS) {
+                String[] fields = line.split(";");
+                String nome = fields[0];
+                LocalDate dataNascimento = LocalDate.parse(fields[1], DateTimeFormatter.ofPattern("M/d/yyyy"));
+                Genero genero = Genero.parseGenero(fields[2]);
+                float altura =   format.parse(fields[3]).floatValue();
+                int peso = format.parse(fields[4]).intValue();
+                float renda = format.parse(fields[5]).floatValue();
+                String naturalidade = fields[6];
+                Moradia moradia = Moradia.parseMoradia(fields[7]);
+                EstadoCivil estadoCivil = EstadoCivil.parseEstadoCivil(fields[8]);
+                Escolaridade escolaridade = Escolaridade.parseEscolaridade(fields[9]);
+                Hobby hobby = Hobby.parseHobby(fields[10]);
+                boolean feliz = fields[11].equalsIgnoreCase("Sim");
+
+                pessoas[numPessoas++] = new Pessoa(nome, dataNascimento, genero, altura, peso, renda,
+                naturalidade, hobby, estadoCivil, escolaridade, feliz, moradia) ;
+                line = file.readLine();
+            }
+        } catch (IOException e) {
+
         }
 
     }
 
-    public double[] calcDistanceVector(Pessoa pessoa) {
-        if (quantidadePessoasCadastradas > 0) {
-            double[] distances = new double[quantidadePessoasCadastradas];
-            for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                distances[i] = distanceMeasure.calcDistance(pessoa, pessoas[i]);
+    public float[] normalizeField(String fieldName) {
+
+        float[] field = new float[numPessoas];
+
+        if (fieldName.equalsIgnoreCase("Altura")) {
+            float maxAltura = this.maxAltura();
+            float minAltura = this.minAltura();
+            float difAltura = maxAltura - minAltura;
+
+            for (int i = 0; i < numPessoas; i++) {
+                field[i] = (pessoas[i].getAltura() - minAltura) / difAltura;
             }
-            return distances;
+        } else if (fieldName.equalsIgnoreCase("Peso")) {
+            float maxPeso = this.maxPeso();
+            float minPeso = this.minPeso();
+            float difPeso = maxPeso - minPeso;
+
+            for (int i = 0; i < numPessoas; i++) {
+                field[i] = ((float) (pessoas[i].getPeso() - minPeso)) / difPeso;
+            }
+        } else if (fieldName.equalsIgnoreCase("Renda")) {
+            float maxRenda = this.maxRenda();
+            float minRenda = this.minRenda();
+            float difRenda = maxRenda - minRenda;
+
+            for (int i = 0; i < numPessoas; i++) {
+                field[i] = ((pessoas[i].getRenda() - minRenda) / difRenda);
+            }
+        } else if (fieldName.equalsIgnoreCase("Altura")) {
+            float maxAltura = this.maxAltura();
+            float minAltura = this.minAltura();
+            float difAltura = maxAltura - minAltura;
+
+            for (int i = 0; i < numPessoas; i++) {
+                pessoas[i].setAltura((pessoas[i].getAltura() - minAltura) / difAltura);
+            }
+        } else if (fieldName.equalsIgnoreCase("Altura")) {
+            float maxAltura = this.maxAltura();
+            float minAltura = this.minAltura();
+            float difAltura = maxAltura - minAltura;
+
+            for (int i = 0; i < numPessoas; i++) {
+                pessoas[i].setAltura((pessoas[i].getAltura() - minAltura) / difAltura);
+            }
         }
-        return new double[0];
+        return field;
     }
-
-    public double[][] calcDistanceMatrix() {
-        if (quantidadePessoasCadastradas > 0) {
-            double[][] distances =
-                    new double[quantidadePessoasCadastradas][quantidadePessoasCadastradas];
-            for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-
-                for (int j = i; j < quantidadePessoasCadastradas; j++) {
-                    if (j != i) {
-                        distances[i][j] = distanceMeasure.calcDistance(pessoas[i], pessoas[j]);
-                    } else {
-                        distances[i][j] = 0;
-                    }
-                }
-                return distances;
-            }
-        }
-        return new double[0][0];
-    }
-
-    public Pessoa[] getSimilar(Pessoa pessoa, int n) {
-        if (quantidadePessoasCadastradas <= 0 || n <= 0 || n > quantidadePessoasCadastradas) {
-            return new Pessoa[0];
-        }
-            int index = 0;
-            for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-                double distancia = distanceMeasure.calcDistance(pessoas[i], pessoa);
-                if (distancia <= 0.5 && distancia > 0) {
-                    index++;
-                }
-            }
-        
-        if (index == 0) {
-            return new Pessoa[0];
-        }
-        Pessoa[] pessoasSimilares = new Pessoa[Math.min(index, n)];
-        index = 0;
-        for (int i = 0; i < quantidadePessoasCadastradas; i++) {
-            double distancia = distanceMeasure.calcDistance(pessoas[i], pessoa);
-            if (distancia <= 0.5 && distancia > 0) {
-                pessoasSimilares[index] = pessoas[i];
-                index++;
-                if (index >= pessoasSimilares.length) {
-                    break; 
-                }
-            }
-        }
-        
-        return pessoasSimilares;
-
-    }
-
-    
 
 }
-
-
