@@ -16,7 +16,12 @@ public class Dataset {
     private static final int MAX_PESSOAS = 1000;
     private Pessoa[] pessoas = new Pessoa[MAX_PESSOAS];
     private int numPessoas = 0;
+    private DistanceMeasure distanceMeasure;
 
+
+    public Dataset(){
+        this.distanceMeasure = new DistanceMeasure();
+    }
     private int searchPessoaByName(String nome) {
         for (int pos = 0; pos < numPessoas; pos++) {
             if (pessoas[pos].getNome().equalsIgnoreCase(nome)) {
@@ -111,7 +116,7 @@ public class Dataset {
         }
         return sum / numPessoas;
     }
- 
+
     public float maxPeso() {
         float max = Float.NEGATIVE_INFINITY;
         for (int i = 0; i < numPessoas; i++) {
@@ -205,7 +210,7 @@ public class Dataset {
         return currentValue;
     }
 
-   public float percentEstadoCivil(EstadoCivil estadoCivil) {
+    public float percentEstadoCivil(EstadoCivil estadoCivil) {
         int count = 0;
         for (int i = 0; i < numPessoas; i++) {
             if (pessoas[i].getEstadoCivil().equals(estadoCivil)) {
@@ -336,7 +341,7 @@ public class Dataset {
             String line = file.readLine();
 
             line = file.readLine();
-            
+
             DecimalFormatSymbols symbols = new DecimalFormatSymbols();
             symbols.setDecimalSeparator(',');
             DecimalFormat format = new DecimalFormat("0.#");
@@ -345,9 +350,10 @@ public class Dataset {
             while (line != null && this.numPessoas < Dataset.MAX_PESSOAS) {
                 String[] fields = line.split(";");
                 String nome = fields[0];
-                LocalDate dataNascimento = LocalDate.parse(fields[1], DateTimeFormatter.ofPattern("M/d/yyyy"));
+                LocalDate dataNascimento =
+                        LocalDate.parse(fields[1], DateTimeFormatter.ofPattern("M/d/yyyy"));
                 Genero genero = Genero.parseGenero(fields[2]);
-                float altura =   format.parse(fields[3]).floatValue();
+                float altura = format.parse(fields[3]).floatValue();
                 int peso = format.parse(fields[4]).intValue();
                 float renda = format.parse(fields[5]).floatValue();
                 String naturalidade = fields[6];
@@ -356,9 +362,10 @@ public class Dataset {
                 Escolaridade escolaridade = Escolaridade.parseEscolaridade(fields[9]);
                 Hobby hobby = Hobby.parseHobby(fields[10]);
                 boolean feliz = fields[11].equalsIgnoreCase("Sim");
+                System.out.printf("Nome: %s, Gênero: %s, Hobby: %s%n", nome, genero, hobby);
 
-                pessoas[numPessoas++] = new Pessoa(nome, dataNascimento, genero, altura, peso, renda,
-                naturalidade, hobby, estadoCivil, escolaridade, feliz, moradia) ;
+                pessoas[numPessoas++] = new Pessoa(nome, dataNascimento, genero, altura, peso,
+                        renda, naturalidade, hobby, estadoCivil, escolaridade, feliz, moradia);
                 line = file.readLine();
             }
         } catch (IOException e) {
@@ -413,6 +420,54 @@ public class Dataset {
             }
         }
         return field;
+    }
+   
+
+    public double[] calcDistanceVector(Pessoa pessoa) {
+        if (numPessoas > 0) {
+            double[] distances = new double[numPessoas];
+            for (int i = 0; i < numPessoas; i++) {
+                distances[i] = distanceMeasure.calcDistance(pessoa, pessoas[i]);
+            }
+            return distances;
+        }
+        return new double[0];
+    }
+
+    public double[][] calcDistanceMatrix() {
+        if (numPessoas > 0) {
+            double[][] distances =
+                    new double[numPessoas][numPessoas];
+            for (int i = 0; i < numPessoas; i++) {
+                for (int j = i; j < numPessoas; j++) {
+                    if (j != i) {
+                        distances[i][j] = distanceMeasure.calcDistance(pessoas[i], pessoas[j]);
+                    } else {
+                        distances[i][j] = 0;
+                    }
+                }
+                return distances;
+            }
+        }
+        return new double[0][0];
+    }
+
+    public Pessoa[] getSimilar(Pessoa pessoa, int n) {
+        if (numPessoas > 0  && n > 0) {
+            Pessoa[] pessoasSimilares = new Pessoa[n];
+            int index = 0;
+            for (int i = 0; i < numPessoas; i++) {
+                if (pessoas[i] != pessoa 
+                        && distanceMeasure.calcDistance(pessoas[i], pessoa) <= 0.5
+                        && index < n) {
+                    pessoasSimilares[index] = pessoas[i];
+                    index++;
+
+                }
+            }
+            return Arrays.copyOf(pessoasSimilares, index);
+        }
+        return new Pessoa[0];
     }
 
 }

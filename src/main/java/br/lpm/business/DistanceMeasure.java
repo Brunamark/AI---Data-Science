@@ -2,6 +2,9 @@ package br.lpm.business;
 
 public class DistanceMeasure {
 
+
+    public DistanceMeasure( ) {}
+    
     public double calcDistance(Pessoa first, Pessoa second) {
         double distance = 0;
         distance += Math.pow(first.getGenero().equals(second.getGenero()) ? 0 : 1, 2);

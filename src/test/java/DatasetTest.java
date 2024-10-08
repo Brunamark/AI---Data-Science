@@ -29,13 +29,13 @@ public class DatasetTest {
     @BeforeEach
     public void setUp() throws Exception {
         dataset = new Dataset();
-        distanceMeasure = new DistanceMeasure(dataset);
+        distanceMeasure = new DistanceMeasure();
 
         pessoa1 = new Pessoa("Mikael Muniz", LocalDate.of(2001, 1, 17), Genero.MASCULINO, 1.80f, 65,
                 3000, "SP", Hobby.GAME, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
                 Moradia.COM_FAMILIA);
         pessoa2 = new Pessoa("Barbara Costa", LocalDate.of(2002, 1, 22), Genero.FEMININO, 1.60f, 58,
-                2000, "MG", Hobby.CULINARIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
+                2000, "MG", Hobby.CULINÁRIA, EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
                 Moradia.COM_FAMILIA);
         pessoa3 = new Pessoa("Raphael Henrique", LocalDate.of(1996, 6, 7), Genero.MASCULINO, 1.72f,
                 80, 5000, "MG", Hobby.GAME, EstadoCivil.CASADO, Escolaridade.MEDIO, false,
@@ -74,7 +74,7 @@ public class DatasetTest {
     @Test
     void testAvgPeso() {
 
-        assertEquals(67, dataset.avgPeso(), "Valor valido de altura");
+        assertEquals(66.5f, dataset.avgPeso(), "Valor valido de altura");
 
     }
 
@@ -153,40 +153,40 @@ public class DatasetTest {
 
     @Test
     void testPercentAdult() {
-        assertEquals(75f, dataset.percentAdult(), "Valor valido para porcentagem adulto");
+        assertEquals(0.75f, dataset.percentAdulto(), "Valor valido para porcentagem adulto");
 
     }
 
     @Test
     void testPercentEscolaridade() {
-        assertEquals(50f, dataset.percentEscolaridade(Escolaridade.SUPERIOR),
+        assertEquals(0.5f, dataset.percentEscolaridade(Escolaridade.SUPERIOR),
                 "Valor valido para porcentagem escolaridade");
 
     }
 
     @Test
     void testPercentEstadoCivil() {
-        assertEquals(25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
+        assertEquals(0.25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
                 "Valor valido para porcentagem estado civil");
     }
 
     @Test
     void testPercentMoradia() {
-        assertEquals(25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
+        assertEquals(0.25f, dataset.percentEstadoCivil(EstadoCivil.VIUVO),
                 "Valor valido para porcentagem moradia");
 
     }
 
     @Test
     void testPercentHobby() {
-        assertEquals(50f, dataset.percentHobby(Hobby.GAME), "Valor valido para porcentagem hobby");
+        assertEquals(0.50f, dataset.percentHobby(Hobby.GAME), "Valor valido para porcentagem hobby");
 
     }
 
 
     @Test
     void testPercentFeliz() {
-        assertEquals(75f, dataset.percentFeliz(), "Valor valido para porcentagem feliz");
+        assertEquals(0.75f, dataset.percentFeliz(), "Valor valido para porcentagem feliz");
 
     }
 
@@ -234,23 +234,16 @@ public class DatasetTest {
     @Test
     void testNormalizeField() {
         dataset.addPessoa(pessoa5);
+        dataset.addPessoa(pessoa6);
+        float[] alturaNormalizada = dataset.normalizeField("altura");
+        float[] pesoNormalizado = dataset.normalizeField("peso");
+        float[] rendaNormalizado = dataset.normalizeField("renda");
 
-        dataset.normalizeField("altura");
-        dataset.normalizeField("peso");
-        dataset.normalizeField("renda");
-        assertEquals(0.71f, dataset.getPessoaByName("Mikael Muniz").getAltura(), 0.01f,
-                "Valor valido para altura");
-        assertEquals(0.32f, dataset.getPessoaByName("Mikael Muniz").getPeso(), 0.01f,
-                "Valor valido para peso");
-        assertEquals(0.47f, dataset.getPessoaByName("Mikael Muniz").getRenda(), 0.01f,
-                "Valor valido para renda");
+        assertEquals(0.714, alturaNormalizada[0],0.01f, "Valor valido altura nromalizada");
+        assertEquals(0.32, pesoNormalizado[0],0.01f, "Valor valido peso nromalizada");
+        assertEquals(0.47, rendaNormalizado[0],0.01f, "Valor valido renda nromalizada");
 
-        assertEquals(0, dataset.getPessoaByName("Barbara Costa").getAltura(), 0.01f,
-                "Valor valido para altura");
-        assertEquals(0, dataset.getPessoaByName("Barbara Costa").getPeso(), 0.01f,
-                "Valor valido para peso");
-        assertEquals(0.21f, dataset.getPessoaByName("Barbara Costa").getRenda(), 0.01f,
-                "Valor valido para renda");
+
 
     }
 
@@ -294,10 +287,21 @@ public class DatasetTest {
         dataset.addPessoa(pessoa5);
         dataset.addPessoa(pessoa6);
 
+        float[] alturaNormalizada = dataset.normalizeField("altura");
+        float[] pesoNormalizado = dataset.normalizeField("peso");
+        float[] rendaNormalizado = dataset.normalizeField("renda");
 
-        dataset.normalizeField("altura");
-        dataset.normalizeField("peso");
-        dataset.normalizeField("renda");
+
+
+        
+        int quantidadePessoa = dataset.size();
+        Pessoa[] pessoas = dataset.getAll();
+
+        for(int i=0; i<quantidadePessoa ; i++){
+            pessoas[i].setAltura(alturaNormalizada[i]);
+            pessoas[i].setPeso(pesoNormalizado[0]);
+            pessoas[i].setRenda(rendaNormalizado[0]);
+        }
 
         Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, 1);
 

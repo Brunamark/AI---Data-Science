@@ -6,6 +6,7 @@ import br.lpm.business.Escolaridade;
 import br.lpm.business.EstadoCivil;
 import br.lpm.business.Genero;
 import br.lpm.business.Hobby;
+import br.lpm.business.Knn;
 import br.lpm.business.Moradia;
 import br.lpm.business.Pessoa;
 import java.time.LocalDate;
@@ -24,55 +25,28 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class Main {
         public static void main(String[] args) throws Exception {
                 Dataset dataset = new Dataset();
-                DistanceMeasure distanceMeasure = new DistanceMeasure(dataset);
 
-                Pessoa pessoa1 = new Pessoa("Mikael Muniz", LocalDate.of(2001, 1, 17),
-                                Genero.MASCULINO, 1.80f, 65, 3000, "SP", Hobby.GAME,
-                                EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
-                                Moradia.COM_FAMILIA);
-                Pessoa pessoa2 = new Pessoa("Barbara Costa", LocalDate.of(2002, 1, 22),
-                                Genero.FEMININO, 1.60f, 58, 2000, "MG", Hobby.CULINARIA,
-                                EstadoCivil.SOLTEIRO, Escolaridade.SUPERIOR, true,
-                                Moradia.COM_FAMILIA);
-                Pessoa pessoa3 = new Pessoa("Raphael Henrique", LocalDate.of(1996, 6, 7),
-                                Genero.MASCULINO, 1.72f, 80, 5000, "MG", Hobby.GAME,
-                                EstadoCivil.CASADO, Escolaridade.MEDIO, false, Moradia.ALUGUEL);
-                Pessoa pessoa4 = new Pessoa("Ana Machado", LocalDate.of(2023, 10, 15),
-                                Genero.FEMININO, 1.65f, 63, 1200, "GO", Hobby.ARTE,
-                                EstadoCivil.VIUVO, Escolaridade.NENHUMA, true, Moradia.COM_FAMILIA);
-                Pessoa pessoa5 = new Pessoa("Pedro Henrique", LocalDate.of(1995, 3, 25),
-                                Genero.MASCULINO, 1.88f, 78, 1500, "PR", Hobby.LIVRO,
-                                EstadoCivil.CASADO, Escolaridade.POS_GRADUACAO, false,
-                                Moradia.COM_FAMILIA);
-                Pessoa pessoa6 = new Pessoa("Dante Miguel", LocalDate.of(2001, 1, 17),
-                                Genero.MASCULINO, 1.75f, 68, 2800, "SP", Hobby.GAME,
-                                EstadoCivil.SOLTEIRO, Escolaridade.POS_GRADUACAO, true,
-                                Moradia.COM_FAMILIA);
+                dataset.loadDataFromCSV("src/main/java/br/lpm/resources/data/cadastro-pessoas.csv");
 
-                dataset.addPessoa(pessoa1);
-                dataset.addPessoa(pessoa2);
-                dataset.addPessoa(pessoa3);
-                dataset.addPessoa(pessoa4);
-                dataset.addPessoa(pessoa5);
-                dataset.addPessoa(pessoa6);
+                float[] alturaNormalizada = dataset.normalizeField("altura");
+                float[] pesoNormalizado = dataset.normalizeField("peso");
+                float[] rendaNormalizado = dataset.normalizeField("renda");
 
+
+
+                int quantidadePessoa = dataset.size();
+                Pessoa[] pessoas = dataset.getAll();
+
+                for (int i = 0; i < quantidadePessoa; i++) {
+                        pessoas[i].setAltura(alturaNormalizada[i]);
+                        pessoas[i].setPeso(pesoNormalizado[0]);
+                        pessoas[i].setRenda(rendaNormalizado[0]);
+                }
+                Knn knn = new Knn(dataset, 3);
+                System.out.println("Pessoa" + pessoas[0] + " eh feliz?" + knn.classifyFeliz(pessoas[0]));
                 histogramFormacaoAcademica(dataset);
                 pieFormacaoAcademica(dataset);
 
-                int n = 1;
-                Pessoa[] pessoasSimilares = dataset.getSimilar(pessoa1, n);
- 
-                for (int i = 0; i < n; i++) {
-
-                        System.out.println("A pessoa " + pessoa1.getNome()
-                                        + " possui similiraidade entre " + pessoasSimilares[i].getNome()
-                                        + ", sendo a distancia igual a "
-                                        + distanceMeasure.calcDistance(pessoa1,
-                                                        pessoasSimilares[i]));
-
-                }
-
-              
 
 
         }

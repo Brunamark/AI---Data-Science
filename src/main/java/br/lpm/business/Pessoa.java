@@ -16,10 +16,19 @@ public class Pessoa {
     private boolean feliz;
     private Moradia moradia;
 
+    public Pessoa(){}
     public String getNome() {
         return nome;
     }
 
+    public void setPeso(float pesoNormalizado) {
+        if (pesoNormalizado >= 0 && pesoNormalizado < 600) {
+            this.peso = (int) pesoNormalizado;
+            return;
+        }
+        this.peso = 1;
+
+    }
     public void setNome(String nome) {
         if (nome == null) {
             this.nome = "No Name " + this.hashCode();
