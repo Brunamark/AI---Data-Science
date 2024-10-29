@@ -1,14 +1,9 @@
 package br.lpm.main;
 
 import br.lpm.business.Dataset;
+/* 
 import br.lpm.business.DistanceMeasure;
-import br.lpm.business.Escolaridade;
-import br.lpm.business.EstadoCivil;
-import br.lpm.business.Genero;
-import br.lpm.business.Hobby;
 import br.lpm.business.Knn;
-import br.lpm.business.Moradia;
-import br.lpm.business.Pessoa;
 import java.time.LocalDate;
 
 import org.jfree.chart.ChartFactory;
@@ -20,12 +15,13 @@ import java.awt.*;
 
 
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;*/
 
 public class Main {
         public static void main(String[] args) throws Exception {
-                Dataset dataset = new Dataset();
-
+               
+              //  Dataset dataset = new Dataset();
+/* 
                 dataset.loadDataFromCSV("src/main/java/br/lpm/resources/data/cadastro-pessoas.csv");
 
                 float[] alturaNormalizada = dataset.normalizeField("altura");
@@ -48,8 +44,9 @@ public class Main {
                 pieFormacaoAcademica(dataset);
 
 
-
+*/
         }
+        /* 
 
         private static void histogramFormacaoAcademica(Dataset dataset) {
                 DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
@@ -126,5 +123,5 @@ public class Main {
                 frame.setVisible(true);
 
         }
-
+        */
 }

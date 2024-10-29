@@ -1,117 +1,50 @@
-<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>360</x><y>216</y><w>189</w><h>171</h></coordinates><panel_attributes>
-Pessoa
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>594</x><y>0</y><w>189</w><h>126</h></coordinates><panel_attributes>DataSet
+--
+-dataPoints: List&lt;DataPoint&gt;
+-attributeNames: List&lt;String&gt;
+-stateName:String 
+--
++getLength(): int
++loadDataFromCSV(filename:String)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>594</x><y>198</y><w>189</w><h>126</h></coordinates><panel_attributes>DataPoint
+--
+-attribute: List&lt;Attribute&gt;
+-state: Object
+--
++getAttributes(): List&lt;Attributes&gt;
++&lt;T&gt; getState(): T
++parse(value: String): trows IllegalFormatExcepetion
 
---
-- nome : String
-- dataNascimento: LocalDate
-- altura: float
-- peso: int
-- renda: float
-- naturalidade: String
-- feliz: boolean
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>774</x><y>108</y><w>324</w><h>468</h></coordinates><panel_attributes>Dataset
---
--pessoas: Pessoa[]
-+ MAX_PESSOAS : int {static, final}
--quantidadePessoasCadastradas: int
-                                                           
---
-+ addPessoa(pessoa : Pessoa) : void 
-+ removePessoa(pessoa : Pessoa) : void 
-+ removePessoaByName(nome : String) : void 
-+ replacePessoa(oldPessoa : Pessoa, newPessoa : Pessoa) : void 
-+ getPessoaByName(nome : String) : Pessoa 
-+ getAll() : Pessoa[]        
-+ removeAll() : void         
-+ size() : int               
-+ maxAltura() : float        
-+ minAltura() : float        
-+ avgAltura() : float        
-+ maxPeso() : int            
-+ minPeso() : int            
-+ avgPeso() : float          
-+ percentAdult() : float     
-+ percentEstadoCivil(estadoCivil : EstadoCivil) : float 
-+ modeEstadoCivil() : EstadoCivil 
-+ percentEscolaridade(escolaridade : Escolaridade) : float 
-+ modeEscolaridade() : Escolaridade 
-+ percentMoradia(moradia : Moradia) : float 
-+ modeMoradia() : Moradia    
-+ percentHobby() : float     
-+ percentFeliz() : float  
-+normalizeField(fieldName:String) : float
-+calcDistanceVector(pessoa:Pessoa): double
-+calcDistanceMatrix(): double[][]
-+getSimilar(pessoa:Pessoa,n:int): Pessoa[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>9</x><y>126</y><w>189</w><h>117</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-Genero 
---
-+FEMININO
-+MASCULINO
-+NAO_BINARIO
-+NAO_RESPONDER
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>234</x><y>0</y><w>189</w><h>117</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-Hobby 
---
-+ARTE
-+ESPORTE
-+CINEMA
-+LIVRO
-+MÚSICA
-+CULINÁRIA
-+GAME
-+NENHUM
-
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>459</y><w>189</w><h>117</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-Escolaridade
---
-+NENHUMA
-+FUNDAMENTAL
-+MEDIO
-+SUPERIOR
-+POS_GRADUACAO
-
-
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>504</x><y>9</y><w>189</w><h>117</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-Moradia 
---
-+COM_FAMILIA
-+ALUGUEL
-+CASA_PROPRIA
-
-
-
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>9</x><y>297</y><w>189</w><h>126</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-EstadoCivil
---
-+SOLTEIRO
-+CASADO
-+SEPARADO
-+DIVORCIADO
-+VIUVO
-+UNIAO_ESTAVEL</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>315</x><y>459</y><w>360</w><h>117</h></coordinates><panel_attributes>DistanceMeasure
---
-+calcDistance(pessoa1:Pessoa,pessoa2:Pessoa):double
-+normalizedEuclideanDistance(first: Pessoa, second: Pessoa): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>666</x><y>504</y><w>126</w><h>27</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>120;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>288</y><w>252</w><h>36</h></coordinates><panel_attributes>lt=&lt;-
-m1=0..n</panel_attributes><additional_attributes>10;10;260;10</additional_attributes></element><element><id>Relation</id><coordinates><x>522</x><y>117</y><w>63</w><h>117</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>675</x><y>117</y><w>45</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
-m2=1
-^
-possui</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>189</x><y>198</y><w>189</w><h>72</h></coordinates><panel_attributes>lt=-
-m1=1
-m2=1
-&lt;possui</panel_attributes><additional_attributes>10;10;190;60</additional_attributes></element><element><id>Relation</id><coordinates><x>189</x><y>315</y><w>189</w><h>45</h></coordinates><panel_attributes>lt=-
-m1=1
-m2=1
-&lt;está</panel_attributes><additional_attributes>10;20;190;20</additional_attributes></element><element><id>Relation</id><coordinates><x>378</x><y>108</y><w>63</w><h>126</h></coordinates><panel_attributes>lt=-
-m1=1
-m2=
-^
-possui</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>180</x><y>369</y><w>198</w><h>162</h></coordinates><panel_attributes>lt=-
-m1=1
-m2=1
-&lt;possui
-</panel_attributes><additional_attributes>10;160;200;10</additional_attributes></element><element><id>Relation</id><coordinates><x>576</x><y>567</y><w>306</w><h>117</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>320;10;320;110;10;110</additional_attributes></element><element><id>UMLClass</id><coordinates><x>369</x><y>612</y><w>216</w><h>117</h></coordinates><panel_attributes>Knn
+m2=0...*</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>873</x><y>225</y><w>189</w><h>72</h></coordinates><panel_attributes>Attribute
 --
-- k:int
+-value: Object
 --
-+classifyFeliz(pessoa: Pessoa,): boolean</panel_attributes><additional_attributes></additional_attributes></element></diagram>
++setValue(:T) : Attribute
++&lt;T&gt; getValue(): T</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>774</x><y>243</y><w>117</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+
+m1=1
+m2=1...*</panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>234</x><y>0</y><w>297</w><h>117</h></coordinates><panel_attributes>Knn
+--
+-dataset: DataSet
+-metric: Metric
+-k:int
+
+--
++calculateDistances(attributes: DataPoint) : List&lt;Double&gt;
++classify(attributes: DataPoint): String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>522</x><y>45</y><w>90</w><h>45</h></coordinates><panel_attributes>lt=&lt;-
+
+m2=0..1
+</panel_attributes><additional_attributes>80;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>225</x><y>207</y><w>297</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+Metric
+--
+
+--
++distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>369</x><y>108</y><w>36</w><h>117</h></coordinates><panel_attributes>lt=&lt;-
+m1=1</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>288</x><y>405</y><w>297</w><h>90</h></coordinates><panel_attributes>
+Feliz:Metric
+--
+
+--
++distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>423</x><y>288</y><w>27</w><h>135</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element></diagram>
