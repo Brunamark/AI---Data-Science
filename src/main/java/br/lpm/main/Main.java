@@ -1,127 +1,70 @@
 package br.lpm.main;
 
-import br.lpm.business.Dataset;
-/* 
-import br.lpm.business.DistanceMeasure;
 import br.lpm.business.Knn;
-import java.time.LocalDate;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
-import javax.swing.*;
-import java.awt.*;
-
-
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;*/
+import br.lpm.business.KnnClassifier;
+import br.lpm.data_structures.Attribute;
+import br.lpm.data_structures.DataPoint;
+import br.lpm.data_structures.Dataset;
+import br.lpm.loaders.CsvLoader;
+import br.lpm.loaders.DataLoader;
+import br.lpm.metrics.FelizMetric;
+import br.lpm.metrics.Metric;
 
 public class Main {
-        public static void main(String[] args) throws Exception {
-               
-              //  Dataset dataset = new Dataset();
-/* 
-                dataset.loadDataFromCSV("src/main/java/br/lpm/resources/data/cadastro-pessoas.csv");
+  
+  public static void main(String[] args) throws Exception {
+    
+    Dataset felizDataset = new Dataset();
+    DataLoader loader = new CsvLoader("C:\\Users\\bruni\\Desktop\\AI---Data-Science\\Felicidade.CSV", ";");
+    loader.load(felizDataset);
+    
+    System.out.println(felizDataset);
+    
+    Metric m = new FelizMetric();
+    
+    DataPoint dp1 = felizDataset.getDataPoints().get(0);
+    DataPoint dp2 = felizDataset.getDataPoints().get(3);
+    
+    System.out.println(dp1 + "\nDistancia: " + m.distance(dp1, dp1));
+    System.out.println(dp2 + "\nDistancia: " + m.distance(dp2, dp2));
+    System.out.println("\nDistancia: " + m.distance(dp1, dp2));
+    System.out.println("\nDistancia: " + m.distance(dp2, dp1));
+    
+    Knn knn = new KnnClassifier(felizDataset, 3, new FelizMetric());
 
-                float[] alturaNormalizada = dataset.normalizeField("altura");
-                float[] pesoNormalizado = dataset.normalizeField("peso");
-                float[] rendaNormalizado = dataset.normalizeField("renda");
+    System.out.println("estado: " + knn.predict(dp1));
+    System.out.println("estado: " + knn.predict(dp2));
 
+    
+    
+    DataPoint testDp = new DataPoint();
+    
+    testDp.addAttribute(new Attribute("Solteiro"));
+    testDp.addAttribute(new Attribute("Sim"));
+    testDp.addAttribute(new Attribute(2200.00));
+    testDp.addAttribute(new Attribute(25));
+    testDp.addAttribute(new Attribute("Sim"));
+    testDp.addAttribute(new Attribute("Sim"));
 
+  
+    System.out.println("estado: " + knn.predict(testDp));
+  
+  
+    DataPoint testDp2 = new DataPoint();
+    
+    testDp2.addAttribute(new Attribute("Solteiro"));
+    testDp2.addAttribute(new Attribute("Sim"));
+    testDp2.addAttribute(new Attribute(1350.00));
+    testDp2.addAttribute(new Attribute(20));
+    testDp2.addAttribute(new Attribute("Nao"));
+    testDp2.addAttribute(new Attribute("Nao"));
 
-                int quantidadePessoa = dataset.size();
-                Pessoa[] pessoas = dataset.getAll();
+  
+    System.out.println("estado: " + knn.predict(testDp2));
+  
+   
+    
+  
+  }
 
-                for (int i = 0; i < quantidadePessoa; i++) {
-                        pessoas[i].setAltura(alturaNormalizada[i]);
-                        pessoas[i].setPeso(pesoNormalizado[0]);
-                        pessoas[i].setRenda(rendaNormalizado[0]);
-                }
-                Knn knn = new Knn(dataset, 3);
-                System.out.println("Pessoa" + pessoas[0] + " eh feliz?" + knn.classifyFeliz(pessoas[0]));
-                histogramFormacaoAcademica(dataset);
-                pieFormacaoAcademica(dataset);
-
-
-*/
-        }
-        /* 
-
-        private static void histogramFormacaoAcademica(Dataset dataset) {
-                DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
-
-
-                int fundamental = 0;
-                int medio = 0;
-                int superior = 0;
-                int posGraduacao = 0;
-                int nenhuma = 0;
-
-                for (Pessoa pessoa : dataset.getAll()) {
-                        if (pessoa != null) {
-                                switch (pessoa.getEscolaridade()) {
-                                        case FUNDAMENTAL:
-                                                fundamental++;
-                                                break;
-                                        case MEDIO:
-                                                medio++;
-                                                break;
-                                        case SUPERIOR:
-                                                superior++;
-                                                break;
-                                        case POS_GRADUACAO:
-                                                posGraduacao++;
-                                                break;
-                                        case NENHUMA:
-                                                nenhuma++;
-                                                break;
-                                }
-                        }
-                }
-
-                dataSet.addValue(fundamental, "Escolaridade", "Fundamental");
-                dataSet.addValue(medio, "Escolaridade", "Médio");
-                dataSet.addValue(superior, "Escolaridade", "Superior");
-                dataSet.addValue(posGraduacao, "Escolaridade", "Pós-Graduação");
-                dataSet.addValue(nenhuma, "Escolaridade", "Nenhuma");
-
-                JFreeChart chart = ChartFactory.createBarChart("Distribuição de Escolaridade",
-                                "Escolaridade", "Número de Pessoas", dataSet,
-                                PlotOrientation.VERTICAL, true, true, false);
-
-                JFrame frame = new JFrame("Histograma da Formação Acadêmica");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(800, 600);
-                frame.setLayout(new BorderLayout());
-                ChartPanel chartPanel = new ChartPanel(chart);
-                frame.add(chartPanel, BorderLayout.CENTER);
-                frame.setVisible(true);
-        }
-
-        private static void pieFormacaoAcademica(Dataset dataset) {
-
-                DefaultPieDataset datasetPie = new DefaultPieDataset();
-
-                for (Escolaridade escolaridade : Escolaridade.values()) {
-                        float percent = dataset.percentEscolaridade(escolaridade);
-                        datasetPie.setValue(escolaridade.toString(), percent);
-                }
-
-                JFreeChart pieChart = ChartFactory.createPieChart("Distribuição de Escolaridade",
-                                datasetPie, datasetPie, 0, true, true, false, false, false, false);
-
-                ChartPanel chartPanel = new ChartPanel(pieChart);
-                chartPanel.setPreferredSize(new Dimension(560, 370));
-
-
-                JFrame frame = new JFrame();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setTitle("Gráfico de Distribuição de Escolaridade");
-                frame.add(chartPanel, BorderLayout.CENTER);
-                frame.pack();
-                frame.setVisible(true);
-
-        }
-        */
 }

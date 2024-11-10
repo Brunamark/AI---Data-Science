@@ -1,4 +1,5 @@
-package br.lpm.business;
+package br.lpm.data_structures;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -6,7 +7,12 @@ public class DataPoint {
     private List<Attribute> attributes;
     private Object state;
 
+
+    public DataPoint() {
+        this.attributes = new ArrayList<>(); 
+    }
     public DataPoint setState(String state){
+       
         this.state = state;
         return this;
     }
@@ -31,8 +37,7 @@ public class DataPoint {
     public Object parse(String input){
         try {
             return Integer.parseInt(input);
-          } catch (Exception e) {
-          }
+          } catch (Exception e) {}
           try {
             return Double.parseDouble(input);
           } catch (Exception e) {
@@ -48,14 +53,14 @@ public class DataPoint {
     }
     @Override
     public String toString() {
-      StringBuffer output = new StringBuffer();
+      StringBuilder output = new StringBuilder();
       output.append("[");
-      
-      for (Attribute a: this.attributes) {
-        output.append(a + ", ");
+  
+      for (Attribute a : this.attributes) {
+          output.append(a).append(", ");
       }
       output.append(this.state);
-      
+  
       output.append("]");
       return output.toString();
     }

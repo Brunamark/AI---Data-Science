@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>594</x><y>0</y><w>189</w><h>126</h></coordinates><panel_attributes>DataSet
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>675</x><y>100</y><w>189</w><h>126</h></coordinates><panel_attributes>DataSet
 --
 -dataPoints: List&lt;DataPoint&gt;
 -attributeNames: List&lt;String&gt;
@@ -6,7 +6,7 @@
 --
 +getLength(): int
 +loadDataFromCSV(filename:String)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>594</x><y>198</y><w>189</w><h>126</h></coordinates><panel_attributes>DataPoint
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>675</x><y>298</y><w>189</w><h>126</h></coordinates><panel_attributes>DataPoint
 --
 -attribute: List&lt;Attribute&gt;
 -state: Object
@@ -15,17 +15,18 @@
 +&lt;T&gt; getState(): T
 +parse(value: String): trows IllegalFormatExcepetion
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>675</x><y>117</y><w>45</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>756</x><y>217</y><w>45</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
-m2=0...*</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>873</x><y>225</y><w>189</w><h>72</h></coordinates><panel_attributes>Attribute
+m2=0...*</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>684</x><y>496</y><w>189</w><h>72</h></coordinates><panel_attributes>Attribute
 --
 -value: Object
 --
 +setValue(:T) : Attribute
-+&lt;T&gt; getValue(): T</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>774</x><y>243</y><w>117</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
++&lt;T&gt; getValue(): T</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>747</x><y>415</y><w>45</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 
 m1=1
-m2=1...*</panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>234</x><y>0</y><w>297</w><h>117</h></coordinates><panel_attributes>Knn
+m2=1...*</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>315</x><y>100</y><w>297</w><h>162</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Knn
 --
 -dataset: DataSet
 -metric: Metric
@@ -33,18 +34,57 @@ m2=1...*</panel_attributes><additional_attributes>10;20;110;20</additional_attri
 
 --
 +calculateDistances(attributes: DataPoint) : List&lt;Double&gt;
-+classify(attributes: DataPoint): String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>522</x><y>45</y><w>90</w><h>45</h></coordinates><panel_attributes>lt=&lt;-
++classify(attributes: DataPoint): String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>145</y><w>90</w><h>45</h></coordinates><panel_attributes>lt=&lt;-
 
 m2=0..1
-</panel_attributes><additional_attributes>80;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>225</x><y>207</y><w>297</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+</panel_attributes><additional_attributes>80;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>306</x><y>307</y><w>297</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
 Metric
 --
 
 --
-+distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>369</x><y>108</y><w>36</w><h>117</h></coordinates><panel_attributes>lt=&lt;-
-m1=1</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>288</x><y>405</y><w>297</w><h>90</h></coordinates><panel_attributes>
++distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>253</y><w>36</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
+m1=1</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>369</x><y>505</y><w>297</w><h>90</h></coordinates><panel_attributes>
 Feliz:Metric
 --
 
 --
-+distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>423</x><y>288</y><w>27</w><h>135</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element></diagram>
++distance(p1: DataPoint, p2: DataPoint): double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>504</x><y>388</y><w>27</w><h>135</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>64</y><w>234</w><h>72</h></coordinates><panel_attributes>KnnClassifier
+--
+
+--
++predict(attributes: Datapoint): Attribute
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>172</y><w>234</w><h>72</h></coordinates><panel_attributes>KnnRegressor
+--
+
+--
++predict(attributes: Datapoint): Attribute
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>225</x><y>100</y><w>108</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>225</x><y>172</y><w>108</w><h>54</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>972</x><y>100</y><w>189</w><h>81</h></coordinates><panel_attributes>&lt;&lt;interface&gt;&gt;
+DataLoader
+--
+
+--
++load(dataSet: DataSet)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>855</x><y>136</y><w>135</w><h>36</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>130;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>909</x><y>244</y><w>216</w><h>81</h></coordinates><panel_attributes>DbLoader
+--
+- db: DataBase
+--
++DbLoader(url_connection: String)
++load(filename:String ,dataSet: DataSet)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1197</x><y>235</y><w>261</w><h>81</h></coordinates><panel_attributes>CsvLoader
+--
+- filename: String
+- delimiter: String
+--
++CsvLoader(filename: String, delimiter: String)
++load(filename:String ,dataSet: DataSet)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1089</x><y>172</y><w>162</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;160;70</additional_attributes></element><element><id>Relation</id><coordinates><x>990</x><y>172</y><w>54</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>40;10;10;80</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1197</x><y>370</y><w>261</w><h>81</h></coordinates><panel_attributes>&lt;&lt;final&gt;&gt;
+_Parser_
+--
+
+--
+-Parser()
+_+ parse(: String): Object_
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1323</x><y>307</y><w>63</w><h>81</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element></diagram>

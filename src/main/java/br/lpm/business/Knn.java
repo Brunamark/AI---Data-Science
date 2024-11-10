@@ -1,21 +1,57 @@
 package br.lpm.business;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-public class Knn {
+
+import br.lpm.metrics.Metric;
+import br.lpm.data_structures.*;;
+public abstract class Knn {
   private Dataset dataset;
   private int k;
   private Metric metric;
+
   public Knn(Dataset dataset, int k, Metric metric) {
       this.dataset = dataset;
       this.k = k;
       this.metric = metric;
   }
   
-  private List<Double> calculateDistances(DataPoint testPoint) {
+
+  public Dataset getDataset() {
+    return dataset;
+  }
+
+
+  public void setDataset(Dataset dataset) {
+    this.dataset = dataset;
+  }
+
+
+  public int getK() {
+    return k;
+  }
+
+
+  public void setK(int k) {
+    this.k = k;
+  }
+
+
+  public Metric getMetric() {
+    return metric;
+  }
+
+
+  public void setMetric(Metric metric) {
+    this.metric = metric;
+  }
+
+
+  public abstract Attribute predict(DataPoint testPoint);
+
+  protected List<Double> calculateDistances(DataPoint testPoint) {
     
     List<Double> distances = new ArrayList<Double>(dataset.getLength());
   
@@ -25,39 +61,20 @@ public class Knn {
     }
     return distances;
   }
-  
-  public Object classify(DataPoint testPoint) {
-    
-    List<Double> distances = this.calculateDistances(testPoint);
-    List<DataPoint> dp = dataset.getDataPoints();
-    Map<Object, Integer> stateCount = new HashMap<Object, Integer>();
-    
-    for (int n = 0; n < k; n++) {
-      int menor = n;
-      
-      for (int i = n + 1; i < dataset.getLength(); i++) {
-        if (distances.get(i) < distances.get(menor)) {
-          menor = i;
-        }
-      }
-      Collections.swap(distances, menor, n);  
-      Collections.swap(dp, menor, n);  
-      Integer f = stateCount.get((Object) dp.get(n).getState()); 
-      if (f == null) {
-        stateCount.put((Object) dp.get(n).getState(), 1);
-      } else {
-        stateCount.put((Object) dp.get(n).getState(), f++);
-      }
-      distances.set(menor, Double.MAX_VALUE);
+
+   protected List<Integer> getNearest(List<Double> distances) {
+
+    int size = this.dataset.getLength();
+    List<Integer> indices = new ArrayList<>(size);
+    for (int i = 0; i < size; i++) {
+      indices.add(i, i);
     }
-    Set<Map.Entry<Object, Integer>> states = stateCount.entrySet();
-    
-    Map.Entry<Object, Integer> winner = states.stream().max((e1, e2) -> {
-          return ((Map.Entry<Object, Integer>) e1).getValue().compareTo(((Map.Entry<Object, Integer>) e2).getValue());
-    }).get();
-    
-    
-    return winner.getKey();
+
+    Collections.sort(indices, Comparator.comparingDouble(i -> distances.get(i)));
+
+    return indices;
   }
+  
+  
   
 }
